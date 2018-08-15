@@ -1,0 +1,1006 @@
+---
+title: "CWA Member Survey on Sexual Harassment - crosstabs"
+author: "Anna Cooper, Office of the Secretary-Treasurer"
+date: "July 31, 2018"
+output:
+  html_document:
+    toc: true
+    toc_depth: 4
+    toc_float:
+      collapsed: false
+---
+
+<style type="text/css"> .table { margin-left:auto; margin-right:auto; width: 75%; } h1 { color: #B22222; font-size: 20px; } h2 { color: #ACB2BD; font-size: 15px; } h3 { color: #000000; font-size: 15px; } </style>
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+remove(list=objects())
+gc()
+setwd("C:/Users/acooper.CWA-UNION/Documents/Survey Research")
+options( java.parameters = "-Xmx6g" )
+options(scipen=999)
+require(survey)
+require(Hmisc)
+require(plyr)
+require(ggplot2)
+require(sjPlot)
+style <- list(css.table='font-family : Roboto', css.thead="border-top:1px solid; text-align:center; font-style:italic; font-weight:normal;"
+              , css.lasttablerow="border-bottom:1px solid;")
+
+df <- read.csv('sh_survey_responses_final_xtab_20180730.csv', header=T, na.strings = "")
+
+dfh <- df[df$â..have.you.personally.experienced.any.of.the.following.harassments.at.your.current.job.or.workplace.within.the.last.year...verbal.harassment.of.a.sexual.nature..unwanted.touching.or.physical.contact..cyber.harassment..including.unwanted.comments.or.photos.shared.via.email..social.media..or.text...unwelcome.sexual.advances.or.requests.for.sexual.favors..physical.acts.of.sexual.assault..homophobic.or.transphobic.comments.or.behavior..sexism.or.gender.based.discrimination..other.forms.of.sexual.harassment.=="Yes",]
+
+
+dfhome <- df[df$do.you.visit.homes.of.customers.or.clients.on.the.job.=="Yes" & !is.na(df$do.you.visit.homes.of.customers.or.clients.on.the.job.),]
+
+
+weights <- df$weights
+
+hweights <- dfh$weights
+
+homeweights <- dfhome$weights
+
+radtab <- function(v1, v2, lab1, lab2, weights, v1name, v2name){
+  t <- sjt.xtab(v1, v2, weight.by = weights, show.col.prc = T, show.obs = T, digits=1 ,
+                #title="YOLO SWAG XTABS"
+            tdcol.col = "000000", var.labels = c(v1name,v2name), value.labels = list(lab1, lab2)
+           , show.na = TRUE
+            , show.summary = FALSE
+           , CSS = style)
+  return(t)
+} 
+
+hradtab <- function(v1, v2, lab1, lab2, weights, v1name, v2name){
+  t <- sjt.xtab(v1, v2, weight.by = hweights, show.col.prc = T, show.obs = T, digits=1 ,
+                #title="YOLO SWAG XTABS"
+            tdcol.col = "000000", var.labels = c(v1name,v2name), value.labels = list(lab1, lab2)
+           , show.na = TRUE
+            , show.summary = FALSE
+           , CSS = style)
+  return(t)
+} 
+
+homeradtab <- function(v1, v2, lab1, lab2, weights, v1name, v2name){
+  t <- sjt.xtab(v1, v2, weight.by = homeweights, show.col.prc = T, show.obs = T, digits=1 ,
+                #title="YOLO SWAG XTABS"
+            tdcol.col = "000000", var.labels = c(v1name,v2name), value.labels = list(lab1, lab2)
+           , show.na = TRUE
+            , show.summary = FALSE
+           , CSS = style)
+  return(t)
+} 
+```
+
+```{r echo=F}
+
+colnames(df)[colnames(df)=="would.you.agree.or.disagree.that.sexual.harassment.is.an.issue.in.your.workplace."] <- "q1"
+
+colnames(df)[colnames(df)=="how.satisfied.are.you.with.the.sexual.harassment.policy.and.procedures.at.your.workplace."]  <- "q2"
+
+colnames(df)[colnames(df)=="â..have.you.personally.experienced.any.of.the.following.harassments.at.your.current.job.or.workplace.within.the.last.year...verbal.harassment.of.a.sexual.nature..unwanted.touching.or.physical.contact..cyber.harassment..including.unwanted.comments.or.photos.shared.via.email..social.media..or.text...unwelcome.sexual.advances.or.requests.for.sexual.favors..physical.acts.of.sexual.assault..homophobic.or.transphobic.comments.or.behavior..sexism.or.gender.based.discrimination..other.forms.of.sexual.harassment."]  <-"q3"
+colnames(df)[colnames(df)=="have.you.witnessed.any.of.the.following.harassments.a.bystander.at.your.current.job.or.workplace.within.the.last.year...verbal.harassment.of.a.sexual.nature..unwanted.touching.or.physical.contact..cyber.harassment..including.unwanted.comments.or.photos.shared.via.email..social.media..or.text...unwelcome.sexual.advances.or.requests.for.sexual.favors..physical.acts.of.sexual.assault..homophobic.or.transphobic.comments.or.behavior..sexism.or.gender.based.discrimination..other.forms.of.sexual.harassment."]<-"q4"
+colnames(df)[colnames(df)=="how.often.do.you.experience.or.witness.sexual.harassment.at.your.workplace."]  <-"q5"
+colnames(df)[colnames(df)=="a.direct.supervisor.please.answer.whether.within.the.last.year.people.in.any.of.the.following.roles.have.ever.been.perpetrators.of.sexual.harassment.against.you.at.your.current.job..check.all.that.apply."]<-"q6"
+colnames(df)[colnames(df)=="someone.in.a.more.senior.role.who.is.not.a.direct.supervisor.please.answer.whether.within.the.last.year.people.in.any.of.the.following.roles.have.ever.been.perpetrators.of.sexual.harassment.against.you.at.your.current.job..check.all.that.apply."]<-"q7"
+colnames(df)[colnames(df)=="another.union.represented.employee.please.answer.whether.within.the.last.year.people.in.any.of.the.following.roles.have.ever.been.perpetrators.of.sexual.harassment.against.you.at.your.current.job..check.all.that.apply."]<-"q8"
+colnames(df)[colnames(df)=="a.steward..representative..or.leader.of.my.union.please.answer.whether.within.the.last.year.people.in.any.of.the.following.roles.have.ever.been.perpetrators.of.sexual.harassment.against.you.at.your.current.job..check.all.that.apply."]<-"q9"
+colnames(df)[colnames(df)=="a.contractor.hired.by.my.employer.please.answer.whether.within.the.last.year.people.in.any.of.the.following.roles.have.ever.been.perpetrators.of.sexual.harassment.against.you.at.your.current.job..check.all.that.apply."]<-"q10"
+colnames(df)[colnames(df)=="a.more.junior.employee.please.answer.whether.within.the.last.year.people.in.any.of.the.following.roles.have.ever.been.perpetrators.of.sexual.harassment.against.you.at.your.current.job..check.all.that.apply."]<-"q11"
+colnames(df)[colnames(df)=="a.customer.of.my.employer.please.answer.whether.within.the.last.year.people.in.any.of.the.following.roles.have.ever.been.perpetrators.of.sexual.harassment.against.you.at.your.current.job..check.all.that.apply."]<-"q12"
+colnames(df)[colnames(df)=="other...write.in.please.answer.whether.within.the.last.year.people.in.any.of.the.following.roles.have.ever.been.perpetrators.of.sexual.harassment.against.you.at.your.current.job..check.all.that.apply."]<-"q13"
+colnames(df)[colnames(df)=="exclusive...none.of.the.above.please.answer.whether.within.the.last.year.people.in.any.of.the.following.roles.have.ever.been.perpetrators.of.sexual.harassment.against.you.at.your.current.job..check.all.that.apply."]<-"q14"
+colnames(dfh)[colnames(dfh)=="reported"]  <-"q15"
+colnames(dfh)[colnames(dfh)=="yes..to.a.steward.if.you.have.experienced.any.form.of.sexual.harassment.in.the.workplace.within.the.last.year..was.the.issue.reported..check.all.that.apply."]<-"q16"
+colnames(dfh)[colnames(dfh)=="yes..to.a.superior.if.you.have.experienced.any.form.of.sexual.harassment.in.the.workplace.within.the.last.year..was.the.issue.reported..check.all.that.apply."]  <-"q17"
+colnames(dfh)[colnames(dfh)=="yes..to.human.resources.if.you.have.experienced.any.form.of.sexual.harassment.in.the.workplace.within.the.last.year..was.the.issue.reported..check.all.that.apply."]  <-"q18"
+colnames(dfh)[colnames(dfh)=="no..but.i.told.a.coworker.if.you.have.experienced.any.form.of.sexual.harassment.in.the.workplace.within.the.last.year..was.the.issue.reported..check.all.that.apply."]  <-"q19"
+colnames(dfh)[colnames(dfh)=="no..not.reported.if.you.have.experienced.any.form.of.sexual.harassment.in.the.workplace.within.the.last.year..was.the.issue.reported..check.all.that.apply."]  <-"q20"
+colnames(dfh)[colnames(dfh)=="if.you.have.reported.an.incident.of.sexual.harassment..how.satisfied.were.you.with.the.outcome."]  <-"q21"
+colnames(dfh)[colnames(dfh)=="didn.t.want.to.get.someone.in.trouble.if.you.did.not.report.to.your.union.steward.or.representative..why.not..check.all.that.apply."]  <-"q22"
+colnames(dfh)[colnames(dfh)=="unsure.how.to.report.the.incident.if.you.did.not.report.to.your.union.steward.or.representative..why.not..check.all.that.apply."]  <-"q23"
+colnames(dfh)[colnames(dfh)=="unsure.reporting.the.incident.would.help.or.be.taken.seriously.if.you.did.not.report.to.your.union.steward.or.representative..why.not..check.all.that.apply."]  <-"q24"
+colnames(dfh)[colnames(dfh)=="don.t.have.a.steward.or.i.m.not.sure.who.that.person.is.if.you.did.not.report.to.your.union.steward.or.representative..why.not..check.all.that.apply."]  <-"q25"
+colnames(dfh)[colnames(dfh)=="worried.about.retaliation.if.you.did.not.report.to.your.union.steward.or.representative..why.not..check.all.that.apply."]  <-"q26"
+colnames(dfh)[colnames(dfh)=="don.t.trust.my.steward.if.you.did.not.report.to.your.union.steward.or.representative..why.not..check.all.that.apply."]  <-"q27"
+colnames(dfh)[colnames(dfh)=="reported.to.human.resources.or.a.superior.instead.if.you.did.not.report.to.your.union.steward.or.representative..why.not..check.all.that.apply."]  <-"q28"
+colnames(dfh)[colnames(dfh)=="lack.of.support.from.co.workers.if.you.did.not.report.to.your.union.steward.or.representative..why.not..check.all.that.apply."]  <-"q29"
+colnames(dfh)[colnames(dfh)=="i.was.not.a.union.member.at.the.time.of.the.incident.s..if.you.did.not.report.to.your.union.steward.or.representative..why.not..check.all.that.apply."]  <-"q30"
+colnames(dfh)[colnames(dfh)=="other...write.in.if.you.did.not.report.to.your.union.steward.or.representative..why.not..check.all.that.apply."]  <-"q31"
+colnames(dfh)[colnames(dfh)=="if.you.did.report.an.incident.of.sexual.harassment.to.a.representative.of.your.union..how.much.do.you.agree.that.the.union.helped.you.achieve.your.desired.outcome."]  <-"q32"
+colnames(df)[colnames(df)=="office.please.describe.your.work.location.â..check.all.that.apply."]  <-"q33"
+colnames(df)[colnames(df)=="call.center.please.describe.your.work.location.â..check.all.that.apply."]  <-"q34"
+colnames(df)[colnames(df)=="newsroom.please.describe.your.work.location.â..check.all.that.apply."]  <-"q35"
+colnames(df)[colnames(df)=="retail.store.please.describe.your.work.location.â..check.all.that.apply."]  <-"q36"
+colnames(df)[colnames(df)=="work.at.remote.sites.in.the.field.or.from.my.vehicle.please.describe.your.work.location.â..check.all.that.apply."]  <-"q37"
+colnames(df)[colnames(df)=="based.from.my.home.please.describe.your.work.location.â..check.all.that.apply."]  <-"q38"
+colnames(df)[colnames(df)=="airport.or.airplane.please.describe.your.work.location.â..check.all.that.apply."]  <-"q39"
+colnames(df)[colnames(df)=="plant.or.manufacturing.site.please.describe.your.work.location.â..check.all.that.apply."]  <-"q40"
+colnames(df)[colnames(df)=="other...write.in.please.describe.your.work.location.â..check.all.that.apply."]  <-"q41"
+colnames(df)[colnames(df)=="do.you.visit.homes.of.customers.or.clients.on.the.job."]  <-"q42"
+colnames(dfhome)[colnames(dfhome)=="if.yes..have.you.had.an.experience.in.the.last.year.where.you.feared.for.your.safety..been.touched.or.grabbed..experienced.unwanted.advances..harassed.verbally..or.experienced.another.form.of.sexual.harassment.in.a.customer.s.or.client.s.home."]  <-"q43"
+colnames(dfhome)[colnames(dfhome)=="have.you.received.training.from.your.employer.on.protecting.yourself.from.difficult.or.inappropriate.situations.in.customer.s.or.client.s.homes."]  <-"q44"
+colnames(df)[colnames(df)=="more.or.better.training.on.how.to.understand.the.existing.sexual.harassment.policy.and.reporting.procedure.at.your.workplace.how.interested.would.you.be.in.the.following.actions.from.your.union.to.address.sexual.harassment.in.the.workplace."]  <-"q45"
+colnames(df)[colnames(df)=="bystander.training.on.how.to.intervene.as.a.witness.of.sexual.harassment.how.interested.would.you.be.in.the.following.actions.from.your.union.to.address.sexual.harassment.in.the.workplace."]  <-"q46"
+colnames(df)[colnames(df)=="advocating.for.a.better.sexual.harassment.policy.at.your.workplace.how.interested.would.you.be.in.the.following.actions.from.your.union.to.address.sexual.harassment.in.the.workplace."]  <-"q47"
+colnames(df)[colnames(df)=="assisting.and.supporting.victims.of.sexual.harassment.to.address.the.issue.and.achieve.a.desired.outcome.how.interested.would.you.be.in.the.following.actions.from.your.union.to.address.sexual.harassment.in.the.workplace."]  <-"q48"
+colnames(df)[colnames(df)=="addressing.issues.of.sexual.harassment.within.your.local..which.could.include.creating.or.improving.a.sexual.harassment.policy.how.interested.would.you.be.in.the.following.actions.from.your.union.to.address.sexual.harassment.in.the.workplace."] <-"q49"
+
+
+
+colnames(df)[colnames(df)=="in.which.industry.do.you.primarily.work."] <-"industry"
+colnames(df)[colnames(df)== "what.is.your.annual.household.income."]<-"income"
+colnames(df)[colnames(df)== "what.is.your.highest.level.of.education."] <- "education"
+colnames(df)[colnames(df)== "racecat"] <- "race"
+colnames(df)[colnames(df)== "sexcat"] <- "gender"
+
+df$age <- NA
+df[df$raw_age < 35,]$age <- "Less than 35"
+df[df$raw_age >=35 & df$raw_age<45,]$age <- "35 - 44"
+df[df$raw_age >=45 & df$raw_age <55,]$age <- "45 - 54"
+df[df$raw_age >=55 & df$raw_age <65,]$age <- "55 - 64"
+df[df$raw_age >=65,]$age <- "65+"
+
+lrace <- list(q = 'race', lab = c("Black/African-American", "Hispanic/Latino", "White", "Other"), wgt = 'weights')
+lage <- list(q = 'age', lab = c("Less than 35", "35 to 44", "45 to 54", "55 to 64", "65 +"), wgt = 'weights')
+lgender <- list(q = 'gender', lab = c("Male", "Female"), wgt = 'weights')
+
+lindustry <- list(q = 'industry', lab = c("Airlines","Education","Government/public service","Healthcare","Law enforcement","Manufacturing","Media","Retail","Telecom","Other - Write In"), wgt = 'weights')
+
+leducation <- list(q = 'education', lab = c("Advanced degree (Master's, Ph.D., M.D.)" 
+,"Bachelor's degree"
+,"Associate degree"
+,"Some college, no degree"
+,"Trade/technical school" 
+,"Graduated high school"
+,"Less than high school"), wgt = 'weights')
+
+lincome <- list(q = 'income', lab = "$150,000 or more"
+,"$125,000 to $149,999"
+,"$100,000 to $124,999"
+,"$75,000 to $99,999"
+,"$50,000 to $74,999"  
+,"$35,000 to $49,999"
+,"$25,000 to $34,999"
+,"Less than $25,000", wgt = 'weights')
+
+colnames(dfh)[colnames(dfh)=="in.which.industry.do.you.primarily.work."] <-"industry"
+colnames(dfh)[colnames(dfh)== "what.is.your.annual.household.income."]<-"income"
+colnames(dfh)[colnames(dfh)== "what.is.your.highest.level.of.education."] <- "education"
+colnames(dfh)[colnames(dfh)== "racecat"] <- "race"
+colnames(dfh)[colnames(dfh)== "sexcat"] <- "gender"
+
+dfh$age <- NA
+dfh[dfh$raw_age < 35,]$age <- "Less than 35"
+dfh[dfh$raw_age >=35 & dfh$raw_age<45,]$age <- "35 - 44"
+dfh[dfh$raw_age >=45 & dfh$raw_age <55,]$age <- "45 - 54"
+dfh[dfh$raw_age >=55 & dfh$raw_age <65,]$age <- "55 - 64"
+dfh[dfh$raw_age >=65,]$age <- "65+"
+
+lhrace <- list(q = 'race', lab = c("Black/African-American", "Hispanic/Latino", "White", "Other"), wgt = 'weights')
+lhage <- list(q = 'age', lab = c("Less than 35", "35 to 44", "45 to 54", "55 to 64", "65 +"), wgt = 'weights')
+lhgender <- list(q = 'gender', lab = c("Male", "Female"), wgt = 'weights')
+
+lhindustry <- list(q = 'industry', lab = c("Airlines","Education","Government/public service","Healthcare","Law enforcement","Manufacturing","Media","Retail","Telecom","Other - Write In"), wgt = 'weights')
+
+colnames(dfhome)[colnames(dfhome)=="in.which.industry.do.you.primarily.work."] <-"industry"
+colnames(dfhome)[colnames(dfhome)== "what.is.your.annual.household.income."]<-"income"
+colnames(dfhome)[colnames(dfhome)== "what.is.your.highest.level.of.education."] <- "education"
+colnames(dfhome)[colnames(dfhome)== "racecat"] <- "race"
+colnames(dfhome)[colnames(dfhome)== "sexcat"] <- "gender"
+
+dfhome$age <- NA
+dfhome[dfhome$raw_age < 35,]$age <- "Less than 35"
+dfhome[dfhome$raw_age >=35 & dfhome$raw_age<45,]$age <- "35 - 44"
+dfhome[dfhome$raw_age >=45 & dfhome$raw_age <55,]$age <- "45 - 54"
+dfhome[dfhome$raw_age >=55 & dfhome$raw_age <65,]$age <- "55 - 64"
+dfhome[dfhome$raw_age >=65,]$age <- "65+"
+
+lhomerace <- list(q = 'race', lab = c("Black/African-American", "Hispanic/Latino", "White", "Other"), wgt = 'weights')
+lhomeage <- list(q = 'age', lab = c("Less than 35", "35 to 44", "45 to 54", "55 to 64", "65 +"), wgt = 'weights')
+lhomegender <- list(q = 'gender', lab = c("Male", "Female"), wgt = 'weights')
+
+lhomeindustry <- list(q = 'industry', lab = c("Airlines","Education","Government/public service","Healthcare","Law enforcement","Manufacturing","Media","Retail","Telecom","Other - Write In"), wgt = 'weights')
+
+```
+```{r echo=F}
+
+df$q1 <- factor(df$q1, levels = c("Strongly agree", "Agree", "Neutral", "Disagree", "Strongly disagree"))
+l1 <- list(q = 'q1', lab = c("Strongly agree", "Agree", "Neutral", "Disagree", "Strongly disagree"), wgt = 'weights')
+
+df$q2 <- factor(df$q2, levels = c("Very Satisfied", "Satisfied", "Neutral", "Dissatisfied", "Very Dissatisfied","Unsure or unaware of any policies or procedures related to sexual harassment in my workplace"))
+l2 <- list(q = 'q2', lab = c("Very Satisfied", "Satisfied", "Neutral", "Dissatisfied", "Very Dissatisfied","Unsure or unaware of any policies or procedures related to sexual harassment in my workplace"), wgt = 'weights')
+
+df$q3 <- factor(df$q3, levels = c("Yes", "No", "Unsure"))
+l3 <- list(q = 'q3', lab = c("Yes", "No", "Unsure"), wgt = 'weights')
+
+df$q4 <- factor(df$q4, levels = c("Yes", "No", "Unsure"))
+l4 <- list(q = 'q4', lab = c("Yes", "No", "Unsure"), wgt = 'weights')
+
+df$q5 <- factor(df$q5, levels = c("At least once per day","1 or more times per week","1 or more times per month","1 or more times per year","Less often than one time per year","Never","Unsure"))
+l5 <- list(q = 'q5', lab = c("At least once per day","1 or more times per week","1 or more times per month","1 or more times per year","Less often than one time per year","Never","Unsure"), wgt = 'weights')
+
+#perpetrators
+
+l6 <- list(q = 'q6', lab = c("A direct supervisor", "Have not experienced sexual harassment from someone in this role"), wgt = 'weights')
+
+df$q7 <- factor(df$q7, levels = c("Someone in a more senior role who is not a direct supervisor", "Have not experienced sexual harassment from someone in this role"))
+l7 <- list(q = 'q7', lab = c("Someone in a more senior role who is not a direct supervisor", "Have not experienced sexual harassment from someone in this role"), wgt = 'weights')
+
+l8 <- list(q = 'q8', lab = c("Another union-represented employee", "Have not experienced sexual harassment from someone in this role"), wgt = 'weights')
+l9 <- list(q = 'q9', lab = c("A steward, representative, or leader of my union", "Have not experienced sexual harassment from someone in this role"), wgt = 'weights')
+l10 <- list(q = 'q10', lab = c("A contractor hired by my employer", "Have not experienced sexual harassment from someone in this role"), wgt = 'weights')
+l11 <- list(q = 'q11', lab = c("A more junior employee" , "Have not experienced sexual harassment from someone in this role"), wgt = 'weights')
+l12 <- list(q = 'q12', lab = c("A customer of my employer", "Have not experienced sexual harassment from someone in this role"), wgt = 'weights')
+
+df$q13 <- factor(df$q13, levels = c("Other - Write In", "Have not experienced sexual harassment from someone in another role"))
+l13 <- list(q = 'q13', lab = c("Other - Write In", "Have not experienced sexual harassment from someone in another role"), wgt = 'weights')
+l14 <- list(q = 'q14', lab = c("Exclusive / None of the above", "Previous option(s) applies"), wgt = 'weights')
+
+#Reporting
+
+dfh$q15 <- factor(dfh$q15, levels = c("Reported", "Did not report"))
+l15 <-list(q = 'q15', lab = c("Reported", "Did not report"), wgt = 'weights')
+
+dfh$q16 <- factor(dfh$q16, levels = c("Yes, to a steward", "Did not report to a steward"))
+l16 <-list(q = 'q16', lab = c("Yes, to a steward", "Did not report to a steward"), wgt = 'weights')
+
+dfh$q17 <- factor(dfh$q17, levels = c("Yes, to a superior", "Did not report to a superior"))
+l17 <-list(q = 'q17', lab = c("Yes, to a superior", "Did not report to a superior"), wgt = 'weights')
+
+dfh$q18 <- factor(dfh$q18, levels = c("Yes, to a Human Resources", "Did not report to Human Resources"))
+l18 <-list(q = 'q18', lab = c("Yes, to a Human Resources", "Did not report to Human Resources"), wgt = 'weights')
+
+dfh$q19 <- factor(dfh$q19, levels = c("No, but I told a coworker", "Did not tell a coworker"))
+l19 <-list(q = 'q19', lab = c("No, but I told a coworker", "Did not tell a coworker"), wgt = 'weights')
+
+dfh$q20 <- factor(dfh$q20, levels = c("Reported or told a coworker", "No, not reported" ))
+l20 <-list(q = 'q20', lab = c("Reported or told a coworker", "No, not reported" ), wgt = 'weights')
+
+dfh$q21 <- factor(dfh$q21, levels = c("Very Satisfied","Satisfied","Neutral","Dissatisfied","Very Dissatisfied","Not applicable","Refused"))
+l21 <- list(q = 'q21', lab = c("Very Satisfied","Satisfied","Neutral","Dissatisfied","Very Dissatisfied","Not applicable","Refused"), wgt = 'weights')
+
+
+l22 <- list(q = 'q22', lab = c("Didn't want to get someone in trouble","This reason did not affect my decision"), wgt = 'weights')
+
+dfh$q23 <- factor(dfh$q23, levels = c("Unsure how to report the incident","This reason did not affect my decision"))
+l23 <- list(q = 'q23', lab = c("Unsure how to report the incident","This reason did not affect my decision"), wgt = 'weights')
+
+dfh$q24 <- factor(dfh$q24, levels = c("Unsure reporting the incident would help or be taken seriously","This reason did not affect my decision"))
+l24 <- list(q = 'q24', lab = c("Unsure reporting the incident would help or be taken seriously","This reason did not affect my decision"), wgt = 'weights')
+
+
+l25 <- list(q = 'q25', lab = c("Don't have a steward or I'm not sure who that person is","This reason did not affect my decision"), wgt = 'weights')
+
+dfh$q26 <- factor(dfh$q26, levels = c("Worried about retaliation","This reason did not affect my decision"))
+l26 <- list(q = 'q26', lab = c("Worried about retaliation","This reason did not affect my decision"), wgt = 'weights')
+
+
+l27 <- list(q = 'q27', lab = c("Don't trust my steward","This reason did not affect my decision"), wgt = 'weights')
+l28 <- list(q = 'q28', lab = c("Reported to Human Resources or a superior instead","This reason did not affect my decision"), wgt = 'weights')
+l29 <- list(q = 'q29', lab = c("Lack of support from co-workers","This reason did not affect my decision"), wgt = 'weights')
+l30 <- list(q = 'q30', lab = c("I was not a union member at the time of the incident(s)","This reason did not affect my decision"), wgt = 'weights')
+l31 <- list(q = 'q31', lab = c("Other - Write in", "No other reason affected my decision"), wgt = 'weights')
+
+dfh$q32 <- factor(dfh$q32, levels = c("Neutral","Disagree","Strongly disagree","Refused"))
+l32 <- list(q = 'q32', lab = c("Neutral","Disagree","Strongly disagree","Refused"), wgt = 'weights')
+
+df$q33 <- factor(df$q33, levels = c("Office", "Do not work in this location type"))
+l33 <- list(q = 'q33', lab = c("Office", "Do not work in this location type"), wgt = 'weights')
+l34 <- list(q = 'q34', lab = c("Call center" , "Do not work in this location type"), wgt = 'weights')
+
+df$q35 <- factor(df$q35, levels = c("Newsroom" , "Do not work in this location type"))
+l35 <- list(q = 'q35', lab = c("Newsroom" , "Do not work in this location type"), wgt = 'weights')
+
+df$q36 <- factor(df$q36, levels = c("Retail store" , "Do not work in this location type"))
+l36 <- list(q = 'q36', lab = c("Retail store" , "Do not work in this location type"), wgt = 'weights')
+
+df$q37 <- factor(df$q37, levels = c("Work at remote sites in the field or from my vehicle" , "Do not work in this location type"))
+l37 <- list(q = 'q37', lab = c("Work at remote sites in the field or from my vehicle" , "Do not work in this location type"), wgt = 'weights')
+
+l38 <- list(q = 'q38', lab = c("Based from my home" , "Do not work in this location type"), wgt = 'weights')
+l39 <- list(q = 'q39', lab = c("Airport or airplane" , "Do not work in this location type"), wgt = 'weights')
+
+df$q40 <- factor(df$q40, levels = c("Plant or manufacturing site" , "Do not work in this location type"))
+l40 <- list(q = 'q40', lab = c("Plant or manufacturing site" , "Do not work in this location type"), wgt = 'weights')
+
+
+l41 <- list(q = 'q41', lab = c("Other - Write In" , "Previous option(s) apply"), wgt = 'weights')
+
+df$q42 <- factor(df$q42, levels = c("Yes", "No") )
+l42 <- list(q = 'q42', lab = c("Yes", "No"), wgt = 'weights')
+
+dfhome$q43 <- factor(dfhome$q43, levels = c("Yes", "No", "Unsure"))
+l43 <- list(q = 'q43', lab = c("Yes", "No", "Unsure"), wgt = 'weights')
+
+dfhome$q44 <- factor(dfhome$q44, levels = c("Yes", "No"))
+l44 <- list(q = 'q44', lab = c("Yes", "No"), wgt = 'weights')
+
+df$q45 <- factor(df$q45, levels = c("Very interested", "Interested", "Neutral", "Not interested", "Not at all interested or opposed"))
+l45 <- list(q = 'q45', lab = c("Very interested", "Interested", "Neutral", "Not interested", "Not at all interested or opposed" 
+), wgt = 'weights')
+
+df$q46 <- factor(df$q46, levels = c("Very interested", "Interested", "Neutral", "Not interested", "Not at all interested or opposed"))
+l46 <- list(q = 'q46', lab = c("Very interested", "Interested", "Neutral", "Not interested", "Not at all interested or opposed" 
+), wgt = 'weights')
+
+df$q47 <- factor(df$q47, levels = c("Very interested", "Interested", "Neutral", "Not interested", "Not at all interested or opposed"))
+l47 <- list(q = 'q47', lab = c("Very interested", "Interested", "Neutral", "Not interested", "Not at all interested or opposed" 
+), wgt = 'weights')
+
+df$q48 <- factor(df$q48, levels = c("Very interested", "Interested", "Neutral", "Not interested", "Not at all interested or opposed"))
+l48 <- list(q = 'q48', lab = c("Very interested", "Interested", "Neutral", "Not interested", "Not at all interested or opposed" 
+), wgt = 'weights')
+
+df$q49 <- factor(df$q49, levels = c("Very interested", "Interested", "Neutral", "Not interested", "Not at all interested or opposed"))
+l49 <- list(q = 'q49', lab = c("Very interested", "Interested", "Neutral", "Not interested", "Not at all interested or opposed" 
+), wgt = 'weights')
+```
+
+
+# About
+
+This is a survey of 630 CWA members nationwide. The surveys were collected online from July 2, 2018 - July 17, 2018. Respondents weighted to the membership using age, race, and gender.
+
+# Personal experience
+
+**Would you agree or disagree that sexual harassment is an issue in your workplace?**
+```{r include=TRUE, echo=F}
+l <- list()
+for (i in list(l1)){
+  for (p in list(lgender, lrace, lage, lindustry)){
+z <- radtab(df[,i$q], df[,p$q], i$lab, p$lab, df[,i$wgt], i$q, p$q)
+l <- c(l, z$knitr)
+}
+}
+```
+`r unlist(l)`
+
+
+**How satisfied are you with the sexual harassment policy and procedures at your workplace?**
+```{r include=TRUE, echo=F}
+l <- list()
+for (i in list(l2)){
+  for (p in list(lgender, lrace, lage, lindustry)){
+z <- radtab(df[,i$q], df[,p$q], i$lab, p$lab, df[,i$wgt], i$q, p$q)
+l <- c(l, z$knitr)
+}
+}
+```
+`r unlist(l)`
+
+
+
+**Have you personally experienced any of the following harassments at your current job or workplace within the last year?:** 
+
+**Verbal harassment of a sexual nature, unwanted touching or physical contact, cyber harassment (including unwanted comments or photos shared via email, social media, or text), unwelcome sexual advances or requests for sexual favors, physical acts of sexual assault, homophobic or transphobic comments or behavior, sexism or gender-based discrimination, other forms of sexual harassment**
+```{r include=TRUE, echo=F}
+l <- list()
+for (i in list()){
+  for (p in list(lgender,  lage, lindustry, lrace)){
+z <- radtab(df[,i$q], df[,p$q], i$lab, p$lab, df[,i$wgt], i$q, p$q)
+l <- c(l, z$knitr)
+}
+}
+```
+`r unlist(l)`
+
+**Have you witnessed any of the following harassments a bystander at your current job or workplace within the last year?:**
+
+**Verbal harassment of a sexual nature, unwanted touching or physical contact, cyber harassment (including unwanted comments or photos shared via email, social media, or text), unwelcome sexual advances or requests for sexual favors, physical acts of sexual assault, homophobic or transphobic comments or behavior, sexism or gender-based discrimination, other forms of sexual harassment**
+```{r include=TRUE, echo=F}
+l <- list()
+for (i in list(l4)){
+  for (p in list(lgender, lrace, lage, lindustry)){
+z <- radtab(df[,i$q], df[,p$q], i$lab, p$lab, df[,i$wgt], i$q, p$q)
+l <- c(l, z$knitr)
+}
+}
+```
+`r unlist(l)`
+
+**How often do you experience or witness sexual harassment at your workplace?**
+```{r include=TRUE, echo=F}
+l <- list()
+for (i in list(l5)){
+  for (p in list(lgender, lrace, lage, lindustry)){
+z <- radtab(df[,i$q], df[,p$q], i$lab, p$lab, df[,i$wgt], i$q, p$q)
+l <- c(l, z$knitr)
+}
+}
+```
+`r unlist(l)`
+
+# Perpetrators 
+
+**Please answer whether within the last year people in any of the following roles have ever been perpetrators of sexual harassment against you at your current job. Check all that apply.**
+
+**The options are listed individually as a respondent could have chosen more than one**
+
+**Direct supervisor**
+```{r include=TRUE, echo=F}
+l <- list()
+for (i in list(l6)){
+  for (p in list(lgender, lrace, lage, lindustry)){
+z <- radtab(df[,i$q], df[,p$q], i$lab, p$lab, df[,i$wgt], i$q, p$q)
+l <- c(l, z$knitr)
+}
+}
+```
+`r unlist(l)`
+
+
+**Someone in a more senior role who is not a direct supervisor**
+```{r include=TRUE, echo=F}
+l <- list()
+for (i in list(l7)){
+  for (p in list(lgender, lrace, lage, lindustry)){
+z <- radtab(df[,i$q], df[,p$q], i$lab, p$lab, df[,i$wgt], i$q, p$q)
+l <- c(l, z$knitr)
+}
+}
+```
+`r unlist(l)`
+
+
+**Another union-represented employee**
+```{r include=TRUE, echo=F}
+l <- list()
+for (i in list(l8)){
+  for (p in list(lgender, lrace, lage, lindustry)){
+z <- radtab(df[,i$q], df[,p$q], i$lab, p$lab, df[,i$wgt], i$q, p$q)
+l <- c(l, z$knitr)
+}
+}
+```
+`r unlist(l)`
+
+
+**A steward, representative, or leader of my union**
+```{r include=TRUE, echo=F}
+l <- list()
+for (i in list(l9)){
+  for (p in list(lgender, lrace, lage, lindustry)){
+z <- radtab(df[,i$q], df[,p$q], i$lab, p$lab, df[,i$wgt], i$q, p$q)
+l <- c(l, z$knitr)
+}
+}
+```
+`r unlist(l)`
+
+
+**A contractor hired by my employer**
+```{r include=TRUE, echo=F}
+l <- list()
+for (i in list(l10)){
+  for (p in list(lgender, lrace, lage, lindustry)){
+z <- radtab(df[,i$q], df[,p$q], i$lab, p$lab, df[,i$wgt], i$q, p$q)
+l <- c(l, z$knitr)
+}
+}
+```
+`r unlist(l)`
+
+
+**A more junior employee**
+```{r include=TRUE, echo=F}
+l <- list()
+for (i in list(l11)){
+  for (p in list(lgender, lrace, lage, lindustry)){
+z <- radtab(df[,i$q], df[,p$q], i$lab, p$lab, df[,i$wgt], i$q, p$q)
+l <- c(l, z$knitr)
+}
+}
+```
+`r unlist(l)`
+
+
+**A customer of my employer**
+```{r include=TRUE, echo=F}
+l <- list()
+for (i in list(l12)){
+  for (p in list(lgender, lrace, lage, lindustry)){
+z <- radtab(df[,i$q], df[,p$q], i$lab, p$lab, df[,i$wgt], i$q, p$q)
+l <- c(l, z$knitr)
+}
+}
+```
+`r unlist(l)`
+
+
+**Other - Write in**
+```{r include=TRUE, echo=F}
+l <- list()
+for (i in list(l13)){
+  for (p in list(lgender, lrace, lage, lindustry)){
+z <- radtab(df[,i$q], df[,p$q], i$lab, p$lab, df[,i$wgt], i$q, p$q)
+l <- c(l, z$knitr)
+}
+}
+```
+`r unlist(l)`
+
+
+**Exclusive/None of the Above**
+```{r include=TRUE, echo=F}
+l <- list()
+for (i in list(l14)){
+  for (p in list(lgender, lrace, lage, lindustry)){
+z <- radtab(df[,i$q], df[,p$q], i$lab, p$lab, df[,i$wgt], i$q, p$q)
+l <- c(l, z$knitr)
+}
+}
+```
+`r unlist(l)`
+
+# Reporting
+
+**The following questions were only asked of individuals who reported they had personally experienced sexual harassment in their workplace**
+
+**If you have experienced any form of sexual harassment in the workplace within the last year, was the issue reported? Check all that apply.**
+
+**Reported to a steward, superior, or Human Resources**
+```{r include=TRUE, echo=F}
+l <- list()
+for (i in list(l15)){
+  for (p in list(lhgender, lhrace, lhage, lhindustry)){
+z <- hradtab(dfh[,i$q], dfh[,p$q], i$lab, p$lab, dfh[,i$wgt], i$q, p$q)
+l <- c(l, z$knitr)
+}
+}
+```
+`r unlist(l)`
+
+
+**Yes, to a steward**
+```{r include=TRUE, echo=F}
+l <- list()
+for (i in list(l16)){
+  for (p in list(lhgender, lhrace, lhage, lhindustry)){
+z <- hradtab(dfh[,i$q], dfh[,p$q], i$lab, p$lab, dfh[,i$wgt], i$q, p$q)
+l <- c(l, z$knitr)
+}
+}
+```
+`r unlist(l)`
+
+
+**Yes to a superior**
+```{r include=TRUE, echo=F}
+l <- list()
+for (i in list(l17)){
+  for (p in list(lhgender, lhrace, lhage, lhindustry)){
+z <- hradtab(dfh[,i$q], dfh[,p$q], i$lab, p$lab, dfh[,i$wgt], i$q, p$q)
+l <- c(l, z$knitr)
+}
+}
+```
+`r unlist(l)`
+
+
+**Yes, to Human Resources**
+```{r include=TRUE, echo=F}
+l <- list()
+for (i in list(l18)){
+  for (p in list(lhgender, lhrace, lhage, lhindustry)){
+z <- hradtab(dfh[,i$q], dfh[,p$q], i$lab, p$lab, dfh[,i$wgt], i$q, p$q)
+l <- c(l, z$knitr)
+}
+}
+```
+`r unlist(l)`
+
+
+**No, but I told a coworker**
+```{r include=TRUE, echo=F}
+l <- list()
+for (i in list(l19)){
+  for (p in list(lhgender, lhrace, lhage, lhindustry)){
+z <- hradtab(dfh[,i$q], dfh[,p$q], i$lab, p$lab, dfh[,i$wgt], i$q, p$q)
+l <- c(l, z$knitr)
+}
+}
+```
+`r unlist(l)`
+
+
+**No, not reported**
+```{r include=TRUE, echo=F}
+l <- list()
+for (i in list(l20)){
+  for (p in list(lhgender, lhrace, lhage, lhindustry)){
+z <- hradtab(dfh[,i$q], dfh[,p$q], i$lab, p$lab, dfh[,i$wgt], i$q, p$q)
+l <- c(l, z$knitr)
+}
+}
+```
+`r unlist(l)`
+
+**If you have reported an incident of sexual harassment, how satisfied were you with the outcome?**
+```{r include=TRUE, echo=F}
+l <- list()
+for (i in list(l21)){
+  for (p in list(lhgender, lhrace, lhage, lhindustry)){
+z <- hradtab(dfh[,i$q], dfh[,p$q], i$lab, p$lab, dfh[,i$wgt], i$q, p$q)
+l <- c(l, z$knitr)
+}
+}
+```
+`r unlist(l)`
+
+
+**The following question was only asked of those respondents who reported experiencing sexual harassment and did not report the incicdent to a steward.**
+
+**The options are listed individually as a respondent could have chosen more than one.**
+
+**If you did not report to your union steward or representative, why not? Check all that apply.**
+
+**Didn't want to get someone in trouble**
+
+```{r include=TRUE, echo=F}
+l <- list()
+for (i in list(l22)){
+  for (p in list(lhgender, lhrace, lhage, lhindustry)){
+z <- hradtab(dfh[,i$q], dfh[,p$q], i$lab, p$lab, dfh[,i$wgt], i$q, p$q)
+l <- c(l, z$knitr)
+}
+}
+```
+`r unlist(l)`
+
+**Unsure how to report the incident**
+```{r include=TRUE, echo=F}
+l <- list()
+for (i in list(l23)){
+  for (p in list(lhgender, lhrace, lhage, lhindustry)){
+z <- hradtab(dfh[,i$q], dfh[,p$q], i$lab, p$lab, dfh[,i$wgt], i$q, p$q)
+l <- c(l, z$knitr)
+}
+}
+```
+`r unlist(l)`
+
+
+**Unsure reporting the incident would help or be taken seriously**
+```{r include=TRUE, echo=F}
+l <- list()
+for (i in list(l24)){
+  for (p in list(lhgender, lhrace, lhage, lhindustry)){
+z <- hradtab(dfh[,i$q], dfh[,p$q], i$lab, p$lab, dfh[,i$wgt], i$q, p$q)
+l <- c(l, z$knitr)
+}
+}
+```
+`r unlist(l)`
+
+
+**Don't have a steward or I'm not sure who that person is**
+```{r include=TRUE, echo=F}
+l <- list()
+for (i in list(l25)){
+  for (p in list(lhgender, lhrace, lhage, lhindustry)){
+z <- hradtab(dfh[,i$q], dfh[,p$q], i$lab, p$lab, dfh[,i$wgt], i$q, p$q)
+l <- c(l, z$knitr)
+}
+}
+```
+`r unlist(l)`
+
+
+**Worried about retaliation**
+```{r include=TRUE, echo=F}
+l <- list()
+for (i in list(l26)){
+  for (p in list(lhgender, lhrace, lhage, lhindustry)){
+z <- hradtab(dfh[,i$q], dfh[,p$q], i$lab, p$lab, dfh[,i$wgt], i$q, p$q)
+l <- c(l, z$knitr)
+}
+}
+```
+`r unlist(l)`
+
+
+**Don't trust my steward**
+```{r include=TRUE, echo=F}
+l <- list()
+for (i in list(l27)){
+  for (p in list(lhgender, lhrace, lhage, lhindustry)){
+z <- hradtab(dfh[,i$q], dfh[,p$q], i$lab, p$lab, dfh[,i$wgt], i$q, p$q)
+l <- c(l, z$knitr)
+}
+}
+```
+`r unlist(l)`
+
+
+**Reported to Human Resources or a superior instead**
+```{r include=TRUE, echo=F}
+l <- list()
+for (i in list(l28)){
+  for (p in list(lhgender, lhrace, lhage, lhindustry)){
+z <- hradtab(dfh[,i$q], dfh[,p$q], i$lab, p$lab, dfh[,i$wgt], i$q, p$q)
+l <- c(l, z$knitr)
+}
+}
+```
+`r unlist(l)`
+
+
+**Lack of support from co-workers**
+```{r include=TRUE, echo=F}
+l <- list()
+for (i in list(l29)){
+  for (p in list(lhgender, lhrace, lhage, lhindustry)){
+z <- hradtab(dfh[,i$q], dfh[,p$q], i$lab, p$lab, dfh[,i$wgt], i$q, p$q)
+l <- c(l, z$knitr)
+}
+}
+```
+`r unlist(l)`
+
+
+**I was not a union member at the time of the incident(s)**
+```{r include=TRUE, echo=F}
+l <- list()
+for (i in list(l30)){
+  for (p in list(lhgender, lhrace, lhage, lhindustry)){
+z <- hradtab(dfh[,i$q], dfh[,p$q], i$lab, p$lab, dfh[,i$wgt], i$q, p$q)
+l <- c(l, z$knitr)
+}
+}
+```
+`r unlist(l)`
+
+
+"Other - Write in"
+```{r include=TRUE, echo=F}
+l <- list()
+for (i in list(l31)){
+  for (p in list(lhgender, lhrace, lhage, lhindustry)){
+z <- hradtab(dfh[,i$q], dfh[,p$q], i$lab, p$lab, dfh[,i$wgt], i$q, p$q)
+l <- c(l, z$knitr)
+}
+}
+```
+`r unlist(l)`
+
+
+**The following question was asked of those who responded that they did report an incident of sexual harassment to their steward.**
+
+**If you did report an incident of sexual harassment to a representative of your union, how much do you agree that the union helped you achieve your desired outcome?**
+
+**Note: Zero respondents agreed or strongly agreed with this statement.**
+
+```{r include=TRUE, echo=F}
+l <- list()
+for (i in list(l32)){
+  for (p in list(lhgender, lhrace, lhage, lhindustry)){
+z <- hradtab(dfh[,i$q], dfh[,p$q], i$lab, p$lab, dfh[,i$wgt], i$q, p$q)
+l <- c(l, z$knitr)
+}
+}
+```
+`r unlist(l)`
+
+#Work Location
+
+**Please describe your work location. Check all that apply.**
+
+**The options are listed individually as a respondent could have chosen more than one.**
+
+**Office**
+```{r include=TRUE, echo=F}
+l <- list()
+for (i in list(l33)){
+  for (p in list(lgender, lrace, lage, lindustry)){
+z <- radtab(df[,i$q], df[,p$q], i$lab, p$lab, df[,i$wgt], i$q, p$q)
+l <- c(l, z$knitr)
+}
+}
+```
+`r unlist(l)`
+
+
+**Airlines**
+```{r include=TRUE, echo=F}
+l <- list()
+for (i in list(l34)){
+  for (p in list(lgender, lrace, lage, lindustry)){
+z <- radtab(df[,i$q], df[,p$q], i$lab, p$lab, df[,i$wgt], i$q, p$q)
+l <- c(l, z$knitr)
+}
+}
+```
+`r unlist(l)`
+
+
+**Newsroom**
+```{r include=TRUE, echo=F}
+l <- list()
+for (i in list(l35)){
+  for (p in list(lgender, lrace, lage, lindustry)){
+z <- radtab(df[,i$q], df[,p$q], i$lab, p$lab, df[,i$wgt], i$q, p$q)
+l <- c(l, z$knitr)
+}
+}
+```
+`r unlist(l)`
+
+
+**Retail store**
+```{r include=TRUE, echo=F}
+l <- list()
+for (i in list(l36)){
+  for (p in list(lgender, lrace, lage, lindustry)){
+z <- radtab(df[,i$q], df[,p$q], i$lab, p$lab, df[,i$wgt], i$q, p$q)
+l <- c(l, z$knitr)
+}
+}
+```
+`r unlist(l)`
+
+
+**Work at remote sites in the field or from my vehicle**
+```{r include=TRUE, echo=F}
+l <- list()
+for (i in list(l37)){
+  for (p in list(lgender, lrace, lage, lindustry)){
+z <- radtab(df[,i$q], df[,p$q], i$lab, p$lab, df[,i$wgt], i$q, p$q)
+l <- c(l, z$knitr)
+}
+}
+```
+`r unlist(l)`
+
+
+**Based from my home**
+```{r include=TRUE, echo=F}
+l <- list()
+for (i in list(l38)){
+  for (p in list(lgender, lrace, lage, lindustry)){
+z <- radtab(df[,i$q], df[,p$q], i$lab, p$lab, df[,i$wgt], i$q, p$q)
+l <- c(l, z$knitr)
+}
+}
+```
+`r unlist(l)`
+
+
+**Airport or airplane**
+```{r include=TRUE, echo=F}
+l <- list()
+for (i in list(l39)){
+  for (p in list(lgender, lrace, lage, lindustry)){
+z <- radtab(df[,i$q], df[,p$q], i$lab, p$lab, df[,i$wgt], i$q, p$q)
+l <- c(l, z$knitr)
+}
+}
+```
+`r unlist(l)`
+
+**Plant or manufacturing site**
+```{r include=TRUE, echo=F}
+l <- list()
+for (i in list(l40)){
+  for (p in list(lgender, lrace, lage, lindustry)){
+z <- radtab(df[,i$q], df[,p$q], i$lab, p$lab, df[,i$wgt], i$q, p$q)
+l <- c(l, z$knitr)
+}
+}
+```
+`r unlist(l)`
+
+
+**Other - Write In**
+```{r include=TRUE, echo=F}
+l <- list()
+for (i in list(l41)){
+  for (p in list(lgender, lrace, lage, lindustry)){
+z <- radtab(df[,i$q], df[,p$q], i$lab, p$lab, df[,i$wgt], i$q, p$q)
+l <- c(l, z$knitr)
+}
+}
+```
+`r unlist(l)`
+
+
+**Do you visit homes of customers or clients on the job?
+```{r include=TRUE, echo=F}
+l <- list()
+for (i in list(l42)){
+  for (p in list(lgender, lrace, lage, lindustry)){
+z <- radtab(df[,i$q], df[,p$q], i$lab, p$lab, df[,i$wgt], i$q, p$q)
+l <- c(l, z$knitr)
+}
+}
+```
+`r unlist(l)`
+
+**If yes, have you had an experience in the last year where you feared for your safety, been touched or grabbed, experienced unwanted advances, harassed verbally, or experienced another form of sexual harassment in a customer's or client's home?**
+```{r include=TRUE, echo=F}
+l <- list()
+for (i in list(l43)){
+  for (p in list(lhomegender, lhomerace, lhomeage, lhomeindustry)){
+z <- homeradtab(dfhome[,i$q], dfhome[,p$q], i$lab, p$lab, dfhome[,i$wgt], i$q, p$q)
+l <- c(l, z$knitr)
+}
+}
+```
+`r unlist(l)`
+
+**Have you received training from your employer on protecting yourself from difficult or inappropriate situations in customer's or client's homes?**
+```{r include=TRUE, echo=F}
+l <- list()
+for (i in list(l44)){
+  for (p in list(lhomegender, lhomerace, lhomeage, lhomeindustry)){
+z <- homeradtab(dfhome[,i$q], dfhome[,p$q], i$lab, p$lab, dfhome[,i$wgt], i$q, p$q)
+l <- c(l, z$knitr)
+}
+}
+```
+`r unlist(l)`
+
+# Actions from the Union
+
+**How interested would you be in the following actions from your union to address sexual harassment in the workplace?**
+
+**More or better training on how to understand the existing sexual harassment policy and reporting procedure at your workplace.**
+```{r include=TRUE, echo=F}
+l <- list()
+for (i in list(l45)){
+  for (p in list(lgender, lrace, lage, lindustry)){
+z <- radtab(df[,i$q], df[,p$q], i$lab, p$lab, df[,i$wgt], i$q, p$q)
+l <- c(l, z$knitr)
+}
+}
+```
+`r unlist(l)`
+
+**Bystander training on how to intervene as a witness of sexual harassment**
+```{r include=TRUE, echo=F}
+l <- list()
+for (i in list(l46)){
+  for (p in list(lgender, lrace, lage, lindustry)){
+z <- radtab(df[,i$q], df[,p$q], i$lab, p$lab, df[,i$wgt], i$q, p$q)
+l <- c(l, z$knitr)
+}
+}
+```
+`r unlist(l)`
+
+**Advocating for a better sexual harassment policy at your workplace**
+```{r include=TRUE, echo=F}
+l <- list()
+for (i in list(l47)){
+  for (p in list(lgender, lrace, lage, lindustry)){
+z <- radtab(df[,i$q], df[,p$q], i$lab, p$lab, df[,i$wgt], i$q, p$q)
+l <- c(l, z$knitr)
+}
+}
+```
+`r unlist(l)`
+
+**Assisting and supporting victims of sexual harassment to address the issue and achieve a desired outcome**
+```{r include=TRUE, echo=F}
+l <- list()
+for (i in list(l48)){
+  for (p in list(lgender, lrace, lage, lindustry)){
+z <- radtab(df[,i$q], df[,p$q], i$lab, p$lab, df[,i$wgt], i$q, p$q)
+l <- c(l, z$knitr)
+}
+}
+```
+`r unlist(l)`
+
+**Addressing issues of sexual harassment within your Local, which could include creating or improving a sexual harassment policy**
+```{r include=TRUE, echo=F}
+l <- list()
+for (i in list(l49)){
+  for (p in list(lgender, lrace, lage, lindustry)){
+z <- radtab(df[,i$q], df[,p$q], i$lab, p$lab, df[,i$wgt], i$q, p$q)
+l <- c(l, z$knitr)
+}
+}
+```
+`r unlist(l)`

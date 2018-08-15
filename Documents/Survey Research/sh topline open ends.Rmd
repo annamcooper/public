@@ -1,0 +1,108 @@
+---
+title: "CWA Member Survey on Sexual Harassment - Open Ends"
+author: "Anna Cooper, Office of the Secretary-Treasuer"
+date: "July 31, 2018"
+output:
+  html_document:
+    toc: true
+    toc_depth: 4
+    toc_float:
+      collapsed: false
+---
+
+<style type="text/css"> .table { margin-left:auto; margin-right:auto; width: 75%; } h1 { color: #B22222; font-size: 20px; } h2 { color: #ACB2BD; font-size: 15px; } h3 { color: #000000; font-size: 15px; } </style>
+
+```{r setup, include=FALSE}
+# knitr::opts_chunk$set(echo=FALSE, warning=FALSE, message=FALSE)
+options(knitr.kable.NA = '')
+rm(list=ls())
+library(aiHelper)
+library(dplyr)
+library(ggplot2)
+require(survey)
+require(Hmisc)
+require(tidyr)
+require(knitr)
+require(magrittr)
+
+# library(aiGraphs)
+```
+
+```{r read_in_data, echo = F, include = F}
+# Read in data
+setwd("C:/Users/acooper.CWA-UNION/Documents/Survey Research")
+
+df <- read.csv('sh_july2018_weighted_final_v3_20180726.csv', header=T, na.strings = "")
+
+dfh <- df[df$â..have.you.personally.experienced.any.of.the.following.harassments.at.your.current.job.or.workplace.within.the.last.year...verbal.harassment.of.a.sexual.nature..unwanted.touching.or.physical.contact..cyber.harassment..including.unwanted.comments.or.photos.shared.via.email..social.media..or.text...unwelcome.sexual.advances.or.requests.for.sexual.favors..physical.acts.of.sexual.assault..homophobic.or.transphobic.comments.or.behavior..sexism.or.gender.based.discrimination..other.forms.of.sexual.harassment.=="Yes",]
+
+
+dfhome <- df[df$do.you.visit.homes.of.customers.or.clients.on.the.job.=="Yes" & !is.na(df$do.you.visit.homes.of.customers.or.clients.on.the.job.),]
+
+#dfh <- read.csv('sh_hq_july2018_weighted_final.csv', header = T, na.strings = "")
+
+#for age report
+df$agerpt <- NA
+df[df$raw_age < 35,]$agerpt <- "Less than 35"
+df[df$raw_age >=35 & df$raw_age<45,]$agerpt <- "35 - 44"
+df[df$raw_age >=45 & df$raw_age <55,]$agerpt <- "45 - 54"
+df[df$raw_age >=55 & df$raw_age <65,]$agerpt <- "55 - 64"
+df[df$raw_age >=65,]$agerpt <- "65+"
+```
+
+#Perpetrators
+
+**Please answer whether within the last year people in any of the following roles have ever been perpetrators of sexual harassment against you at your current job.**
+
+**Write-in responses for "Other".**
+
+```{r echo = F}
+perp <- table(df$other...write.in.please.answer.whether.within.the.last.year.people.in.any.of.the.following.roles.have.ever.been.perpetrators.of.sexual.harassment.against.you.at.your.current.job..check.all.that.apply..1)
+
+knitr::kable(perp, col.names = c("Other perpetrators","Count"), align = c('l','r'))
+```
+
+#Reporting
+
+**If you did not report to your union steward or representative, why not? Check all that apply.**
+
+**Write-in responses for "Other".**
+
+```{r echo = F}
+stew<- table(df$other...write.in.if.you.did.not.report.to.your.union.steward.or.representative..why.not..check.all.that.apply..1)
+
+knitr::kable(unique(df$other...write.in.if.you.did.not.report.to.your.union.steward.or.representative..why.not..check.all.that.apply..1), col.names = c("Other reasons sexual harassment was not reported to a a steward"), align = c('l'))
+```
+
+#Industry
+
+**In which industry do you primarily work?**
+
+**Write-in responses for "Other".**
+
+```{r echo = F}
+ind <- table(df$other...write.in.in.which.industry.do.you.primarily.work.)
+
+knitr::kable(ind, col.names = c("Other industries","Count"), align = c('l','r'))
+```
+
+#Work location
+
+**Please describe your work location.**
+
+**Write-in responses for "Other".**
+
+```{r echo = F}
+loc <- table(df$other...write.in.please.describe.your.work.location.â..check.all.that.apply..1)
+
+knitr::kable(loc, col.names = c("Other work locations","Count"), align = c('l','r'))
+```
+
+# Comments
+
+**Additonal Comments**
+
+```{r echo = F}
+
+knitr::kable(unique(df[df$are.there.any.additional.comments.you.d.like.to.share.!="No" & df$are.there.any.additional.comments.you.d.like.to.share. !="None" &df$are.there.any.additional.comments.you.d.like.to.share.!="no" & df$are.there.any.additional.comments.you.d.like.to.share. != "Not at this time" & df$are.there.any.additional.comments.you.d.like.to.share. !="NONE" & df$are.there.any.additional.comments.you.d.like.to.share. != "none" & df$are.there.any.additional.comments.you.d.like.to.share. != "na" & df$are.there.any.additional.comments.you.d.like.to.share. != "Na" & df$are.there.any.additional.comments.you.d.like.to.share. != "N/A" & df$are.there.any.additional.comments.you.d.like.to.share. != "Nope" & df$are.there.any.additional.comments.you.d.like.to.share. != "N/a" & df$are.there.any.additional.comments.you.d.like.to.share. != "No", ]$are.there.any.additional.comments.you.d.like.to.share.), col.names = "Comments")
+```

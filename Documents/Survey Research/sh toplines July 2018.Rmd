@@ -1,0 +1,675 @@
+---
+title: "CWA Member Survey on Sexual Harassment"
+author: "Anna Cooper, Office of the Secretary-Treasurer"
+date: "July 19, 2018"
+output:
+  html_document:
+    toc: true
+    toc_depth: 4
+    toc_float:
+      collapsed: false
+---
+
+<style type="text/css"> .table { margin-left:auto; margin-right:auto; width: 75%; } h1 { color: #cc0000; font-size: 20px; } h2 { color: #ACB2BD; font-size: 15px; } h3 { color: #000000; font-size: 15px; } </style>
+
+```{r setup, include=FALSE}
+# knitr::opts_chunk$set(echo=FALSE, warning=FALSE, message=FALSE)
+options(knitr.kable.NA = '')
+rm(list=ls())
+library(aiHelper)
+library(dplyr)
+library(ggplot2)
+require(survey)
+require(Hmisc)
+require(tidyr)
+require(knitr)
+require(magrittr)
+
+# library(aiGraphs)
+```
+
+```{r read_in_data, echo = F, include = F}
+# Read in data
+setwd("C:/Users/acooper.CWA-UNION/Documents/Survey Research")
+
+df <- read.csv('sh_july2018_weighted_final_v3_20180726.csv', header=T, na.strings = "")
+
+dfh <- df[df$â..have.you.personally.experienced.any.of.the.following.harassments.at.your.current.job.or.workplace.within.the.last.year...verbal.harassment.of.a.sexual.nature..unwanted.touching.or.physical.contact..cyber.harassment..including.unwanted.comments.or.photos.shared.via.email..social.media..or.text...unwelcome.sexual.advances.or.requests.for.sexual.favors..physical.acts.of.sexual.assault..homophobic.or.transphobic.comments.or.behavior..sexism.or.gender.based.discrimination..other.forms.of.sexual.harassment.=="Yes",]
+
+
+dfhome <- df[df$do.you.visit.homes.of.customers.or.clients.on.the.job.=="Yes" & !is.na(df$do.you.visit.homes.of.customers.or.clients.on.the.job.),]
+
+#dfh <- read.csv('sh_hq_july2018_weighted_final.csv', header = T, na.strings = "")
+
+#for age report
+df$agerpt <- NA
+df[df$raw_age < 35,]$agerpt <- "Less than 35"
+df[df$raw_age >=35 & df$raw_age<45,]$agerpt <- "35 - 44"
+df[df$raw_age >=45 & df$raw_age <55,]$agerpt <- "45 - 54"
+df[df$raw_age >=55 & df$raw_age <65,]$agerpt <- "55 - 64"
+df[df$raw_age >=65,]$agerpt <- "65+"
+
+#clean up comments
+
+```
+
+```{r, echo = F}
+tt <- function(x, weights = df$weights,
+               lvls = NULL, recode_na = "",
+               raw_df = F,
+               order_prop = F){
+  # x = vector of values
+  # weights = weights
+  # lvls = level order in x (if you want it ordered)
+  # necode_na = how to recode NA values
+  # raw_df = if T, return markdown, if F return df
+  # order_prop = if T, order by proprotion, if F, order alphabetical
+  
+  # conditions to run
+  stopifnot(is.vector(x),
+            length(x) > 0,
+            length(x) == length(weights) | is.null(weights)
+  )
+  
+  # if weights is null, set to 1
+  if(is.null(weights)) weights <- rep(1, length(x))
+  
+  # add NA values
+  if(!is.null(recode_na)) x[is.na(x)] <- recode_na
+  
+  # add ordered factor
+  if(!is.null(lvls)) x <- factor(x, levels = c(lvls, recode_na), 
+                                 ordered = T)
+  
+  # create crosstab
+  df <- data.frame(variable = x, weights = weights) %>%
+    # group by variable
+    group_by(variable) %>%
+    # get raw counts
+    dplyr::summarise(unweighted_n = n(),
+              weighted_n = sum(weights)) %>%
+    ungroup() %>%
+    # create probabilities
+    mutate(unweighted_prop = unweighted_n/sum(unweighted_n),
+           weighted_prop = weighted_n/sum(weighted_n))
+  
+  # Order if applicable
+  if(order_prop == TRUE){
+    df <- df %>%
+      arrange(desc(weighted_prop))
+  }
+  
+  df <- df %>%
+    # Format
+    mutate(weighted_prop = sprintf("%.0f%%", round(weighted_prop * 100, 3)),
+           weighted_n = round(weighted_n),
+           unweighted_prop = sprintf("%.0f%%", round(unweighted_prop * 100, 3)),
+           unweighted_n = round(unweighted_n)
+    ) %>%
+    select(variable, weighted_prop, weighted_n, unweighted_prop, unweighted_n)
+  
+  
+  
+  # Add total
+  df <- rbind(
+    df, 
+    data.frame(variable = '**Total**', 
+               weighted_prop = sprintf("%.0f%%", round(sum(df$weighted_n)/sum(df$weighted_n)*100,1)), weighted_n = sum(df$weighted_n),
+               unweighted_prop = NA, unweighted_n = sum(df$unweighted_n)
+    )
+  )
+  
+  
+  df <- df %>% 
+    select(variable, weighted_prop)
+  
+  if(raw_df == TRUE){
+    return(df)
+  } else {
+    knitr::kable(
+      df, col.names = c('', '%'), 
+      align = c('l', 'r'), format.args = list(big.mark = ',')
+    )
+  }
+    
+}
+
+# function for split A
+tth <- function(x, weights = dfh$weights,
+               lvls = NULL, recode_na = "",
+               raw_df = F,
+               order_prop = F){
+  # x = vector of values
+  # weights = weights
+  # lvls = level order in x (if you want it ordered)
+  # necode_na = how to recode NA values
+  # raw_df = if T, return markdown, if F return df
+  # order_prop = if T, order by proprotion, if F, order alphabetical
+  
+  # conditions to run
+  stopifnot(is.vector(x),
+            length(x) > 0,
+            length(x) == length(weights) | is.null(weights)
+  )
+  
+  # if weights is null, set to 1
+  if(is.null(weights)) weights <- rep(1, length(x))
+  
+  # add NA values
+  if(!is.null(recode_na)) x[is.na(x)] <- recode_na
+  
+  # add ordered factor
+  if(!is.null(lvls)) x <- factor(x, levels = c(lvls, recode_na), 
+                                 ordered = T)
+  
+  # create crosstab
+  df <- data.frame(variable = x, weights = weights) %>%
+    # group by variable
+    group_by(variable) %>%
+    # get raw counts
+    dplyr::summarise(unweighted_n = n(),
+              weighted_n = sum(weights)) %>%
+    ungroup() %>%
+    # create probabilities
+    mutate(unweighted_prop = unweighted_n/sum(unweighted_n),
+           weighted_prop = weighted_n/sum(weighted_n))
+  
+  # Order if applicable
+  if(order_prop == TRUE){
+    df <- df %>%
+      arrange(desc(weighted_prop))
+  }
+  
+  df <- df %>%
+    # Format
+    mutate(weighted_prop = sprintf("%.0f%%", round(weighted_prop * 100, 3)),
+           weighted_n = round(weighted_n),
+           unweighted_prop = sprintf("%.0f%%", round(unweighted_prop * 100, 3)),
+           unweighted_n = round(unweighted_n)
+    ) %>%
+    select(variable, weighted_prop, weighted_n, unweighted_prop, unweighted_n)
+  
+  
+  
+  # Add total
+  df <- rbind(
+    df, 
+    data.frame(variable = '**Total**', 
+               weighted_prop = sprintf("%.0f%%", round(sum(df$weighted_n)/sum(df$weighted_n)*100,1)), weighted_n = sum(df$weighted_n),
+               unweighted_prop = NA, unweighted_n = sum(df$unweighted_n)
+    )
+  )
+  
+  
+  df <- df %>% 
+    select(variable, weighted_prop)
+  
+  if(raw_df == TRUE){
+    return(df)
+  } else {
+    knitr::kable(
+      df, col.names = c('', '%'), 
+      align = c('l', 'r'), format.args = list(big.mark = ',')
+    )
+  }
+    
+}
+
+# function for clients homes
+tthome <- function(x, weights = dfhome$weights,
+               lvls = NULL, recode_na = "",
+               raw_df = F,
+               order_prop = F){
+  # x = vector of values
+  # weights = weights
+  # lvls = level order in x (if you want it ordered)
+  # necode_na = how to recode NA values
+  # raw_df = if T, return markdown, if F return df
+  # order_prop = if T, order by proprotion, if F, order alphabetical
+  
+  # conditions to run
+  stopifnot(is.vector(x),
+            length(x) > 0,
+            length(x) == length(weights) | is.null(weights)
+  )
+  
+  # if weights is null, set to 1
+  if(is.null(weights)) weights <- rep(1, length(x))
+  
+  # add NA values
+  if(!is.null(recode_na)) x[is.na(x)] <- recode_na
+  
+  # add ordered factor
+  if(!is.null(lvls)) x <- factor(x, levels = c(lvls, recode_na), 
+                                 ordered = T)
+  
+  # create crosstab
+  df <- data.frame(variable = x, weights = weights) %>%
+    # group by variable
+    group_by(variable) %>%
+    # get raw counts
+    dplyr::summarise(unweighted_n = n(),
+              weighted_n = sum(weights)) %>%
+    ungroup() %>%
+    # create probabilities
+    mutate(unweighted_prop = unweighted_n/sum(unweighted_n),
+           weighted_prop = weighted_n/sum(weighted_n))
+  
+  # Order if applicable
+  if(order_prop == TRUE){
+    df <- df %>%
+      arrange(desc(weighted_prop))
+  }
+  
+  df <- df %>%
+    # Format
+    mutate(weighted_prop = sprintf("%.0f%%", round(weighted_prop * 100, 3)),
+           weighted_n = round(weighted_n),
+           unweighted_prop = sprintf("%.0f%%", round(unweighted_prop * 100, 3)),
+           unweighted_n = round(unweighted_n)
+    ) %>%
+    select(variable, weighted_prop, weighted_n, unweighted_prop, unweighted_n)
+  
+  
+  
+  # Add total
+  df <- rbind(
+    df, 
+    data.frame(variable = '**Total**', 
+               weighted_prop = sprintf("%.0f%%", round(sum(df$weighted_n)/sum(df$weighted_n)*100,1)), weighted_n = sum(df$weighted_n),
+               unweighted_prop = NA, unweighted_n = sum(df$unweighted_n)
+    )
+  )
+  
+  
+  df <- df %>% 
+    select(variable, weighted_prop)
+  
+  if(raw_df == TRUE){
+    return(df)
+  } else {
+    knitr::kable(
+      df, col.names = c('', '%'), 
+      align = c('l', 'r'), format.args = list(big.mark = ',')
+    )
+  }
+    
+}
+
+#default levels
+l1 <- c(
+  "Strongly agree",
+  "Agree",
+  "Neutral",
+  "Disagree",
+  "Strongly disagree"
+)
+
+l2 <- c(
+  "Yes",
+  "No",
+  "Unsure"
+)
+l3 <- c(
+  "Very interested",
+  "Interested",
+  "Neutral",
+  "Not interested",
+  "Not at all interested or opposed"
+)
+```
+<b><p align="center">MoE +/- `r round(1/sqrt(nrow(df))*100,1)`%
+</br>
+N = `r nrow(df)`
+</p></b>
+
+# About
+
+This is a survey of 630 CWA members nationwide. The surveys were collected online from July 2, 2018 - July 17, 2018. Respondents weighted to the membership using age, race, and gender.  Some questions were not asked of all respondents (for example, questions about reporting an incident were only served to respondents who answered that they had personally experienced sexual harassment), the margin of error for such questions will be higher.
+
+# Screen
+
+**Are you currently a dues paying member of the Communications Workers of America (CWA)?**
+
+```{r, echo = F, warning=F}
+tt(x = as.vector(df$are.you.currently.a.dues.paying.member.of.the.communications.workers.of.america..cwa..), lvls = "Yes")
+```
+
+# Issue in the workplace
+
+**Would you agree or disagree that sexual harassment is an issue in your workplace?**
+```{r echo = F}
+tt(x = as.vector(df$would.you.agree.or.disagree.that.sexual.harassment.is.an.issue.in.your.workplace.), lvls = l1)
+```
+
+**How satisfied are you with the sexual harassment policy and procedures at your workplace?**
+```{r echo = F}
+tt(x = as.vector(df$how.satisfied.are.you.with.the.sexual.harassment.policy.and.procedures.at.your.workplace.), lvls = c("Very Satisfied", "Satisfied", "Neutral", "Dissatisfied", "Very Dissatisfied","Unsure or unaware of any policies or procedures related to sexual harassment in my workplace"), recode_na = "Refused")
+```
+
+# Personal experience
+
+**Have you personally experienced any of the following harassments at your current job or workplace within the last year?:** 
+
+**Verbal harassment of a sexual nature, unwanted touching or physical contact, cyber harassment (including unwanted comments or photos shared via email, social media, or text), unwelcome sexual advances or requests for sexual favors, physical acts of sexual assault, homophobic or transphobic comments or behavior, sexism or gender-based discrimination, other forms of sexual harassment**
+
+```{r echo = F}
+tt(x = as.vector(df$â..have.you.personally.experienced.any.of.the.following.harassments.at.your.current.job.or.workplace.within.the.last.year...verbal.harassment.of.a.sexual.nature..unwanted.touching.or.physical.contact..cyber.harassment..including.unwanted.comments.or.photos.shared.via.email..social.media..or.text...unwelcome.sexual.advances.or.requests.for.sexual.favors..physical.acts.of.sexual.assault..homophobic.or.transphobic.comments.or.behavior), recode_na = "Refused", lvls = l2)
+```
+
+**Have you witnessed any of the following harassments a bystander at your current job or workplace within the last year?:**
+
+**Verbal harassment of a sexual nature, unwanted touching or physical contact, cyber harassment (including unwanted comments or photos shared via email, social media, or text), unwelcome sexual advances or requests for sexual favors, physical acts of sexual assault, homophobic or transphobic comments or behavior, sexism or gender-based discrimination, other forms of sexual harassment**
+```{r echo = F}
+tt(x = as.vector(df$have.you.witnessed.any.of.the.following.harassments.a.bystander.at.your.current.job.or.workplace.within.the.last.year...verbal.harassment.of.a.sexual.nature..unwanted.touching.or.physical.contact..cyber.harassment..including.unwanted.comments.or.photos.shared.via.email..social.media..or.text...unwelcome.sexual.advances.or.requests.for.sexual.favors..physical.acts.of.sexual.assault..homophobic.or.transphobic.comments.or.behavior..sexism.or.gender.based.discrimination..other.forms.of.sexual.harassment.), lvls = l2, recode_na = "Refused")
+```
+
+**How often do you experience or witness sexual harassment at your workplace?**
+```{r echo = F}
+tt(x = as.vector(df$how.often.do.you.experience.or.witness.sexual.harassment.at.your.workplace.), lvls = c("At least once per day","1 or more times per week","1 or more times per month","1 or more times per year","Less often than one time per year","Never","Unsure"), recode_na = "Refused")
+```
+
+# Perpetrators
+
+**Please answer whether within the last year people in any of the following roles have ever been perpetrators of sexual harassment against you at your current job. Check all that apply.**
+
+**The options are listed individually as a respondent could have chosen more than one**
+
+```{r echo = F}
+tt(x = as.vector(df$a.direct.supervisor.please.answer.whether.within.the.last.year.people.in.any.of.the.following.roles.have.ever.been.perpetrators.of.sexual.harassment.against.you.at.your.current.job..check.all.that.apply.), lvls = c("A direct supervisor"), recode_na = "Have not experienced sexual harassment from someone in this role")
+```
+
+```{r echo = F}
+tt(x = as.vector(df$someone.in.a.more.senior.role.who.is.not.a.direct.supervisor.please.answer.whether.within.the.last.year.people.in.any.of.the.following.roles.have.ever.been.perpetrators.of.sexual.harassment.against.you.at.your.current.job..check.all.that.apply.), lvls = "Someone in a more senior role who is not a direct supervisor", recode_na = "Have not experienced sexual harassment from someone in this role")
+```
+
+```{r echo = F}
+tt(x = as.vector(df$another.union.represented.employee.please.answer.whether.within.the.last.year.people.in.any.of.the.following.roles.have.ever.been.perpetrators.of.sexual.harassment.against.you.at.your.current.job..check.all.that.apply.), lvls = "Another union-represented employee", recode_na = "Have not experienced sexual harassment from someone in this role")
+```
+
+```{r echo = F}
+tt(x = as.vector(df$a.steward..representative..or.leader.of.my.union.please.answer.whether.within.the.last.year.people.in.any.of.the.following.roles.have.ever.been.perpetrators.of.sexual.harassment.against.you.at.your.current.job..check.all.that.apply.), lvls = "A steward, representative, or leader of my union", recode_na = "Have not experienced sexual harassment from someone in this role")
+```
+
+```{r echo = F}
+tt(x = as.vector(df$a.contractor.hired.by.my.employer.please.answer.whether.within.the.last.year.people.in.any.of.the.following.roles.have.ever.been.perpetrators.of.sexual.harassment.against.you.at.your.current.job..check.all.that.apply.), lvls = "A contractor hired by my employer", recode_na = "Have not experienced sexual harassment from someone in this role")
+```
+
+```{r echo = F}
+tt(x = as.vector(df$a.more.junior.employee.please.answer.whether.within.the.last.year.people.in.any.of.the.following.roles.have.ever.been.perpetrators.of.sexual.harassment.against.you.at.your.current.job..check.all.that.apply.), lvls = "A more junior employee", recode_na = "Have not experienced sexual harassment from someone in this role")
+```
+
+```{r echo = F}
+tt(x = as.vector(df$a.customer.of.my.employer.please.answer.whether.within.the.last.year.people.in.any.of.the.following.roles.have.ever.been.perpetrators.of.sexual.harassment.against.you.at.your.current.job..check.all.that.apply.), lvls = "A customer of my employer", recode_na = "Have not experienced sexual harassment from someone in this role")
+```
+
+```{r echo = F}
+tt(x = as.vector(df$exclusive...none.of.the.above.please.answer.whether.within.the.last.year.people.in.any.of.the.following.roles.have.ever.been.perpetrators.of.sexual.harassment.against.you.at.your.current.job..check.all.that.apply.), lvls = "Exclusive / None of the above", recode_na = "One of the previous options applies")
+```
+
+```{r echo = F}
+tt(x = as.vector(df$other...write.in.please.answer.whether.within.the.last.year.people.in.any.of.the.following.roles.have.ever.been.perpetrators.of.sexual.harassment.against.you.at.your.current.job..check.all.that.apply.), lvls = "Other - Write In", recode_na = "Have not experienced sexual harassment from someone in another role")
+```
+
+```{r echo = F}
+perp <- table(df$other...write.in.please.answer.whether.within.the.last.year.people.in.any.of.the.following.roles.have.ever.been.perpetrators.of.sexual.harassment.against.you.at.your.current.job..check.all.that.apply..1)
+
+knitr::kable(perp, col.names = c("Other perpetrators","Count"), align = c('l','r'))
+```
+
+# Reporting
+
+**The following questions were only asked of individuals who reported they had personally experienced sexual harassment in their workplace**
+
+**If you have experienced any form of sexual harassment in the workplace within the last year, was the issue reported? Check all that apply.**
+
+**Reported to a steward, superior, or Human Resources**
+```{r echo = F}
+tth(x = as.vector(dfh$reported), lvls = "Reported", recode_na = "Did not report")
+```
+
+**For those who did report an incident, to whom it was reported.**
+
+**The options are listed individually as a respondent could have chosen more than one.**
+
+```{r echo = F}
+tth(x = as.vector(dfh$yes..to.a.steward.if.you.have.experienced.any.form.of.sexual.harassment.in.the.workplace.within.the.last.year..was.the.issue.reported..check.all.that.apply.), lvls = c("Yes, to a steward"), recode_na = "Did not report to a steward")
+```
+
+```{r echo = F}
+tth(x = as.vector(dfh$yes..to.a.superior.if.you.have.experienced.any.form.of.sexual.harassment.in.the.workplace.within.the.last.year..was.the.issue.reported..check.all.that.apply.), lvls = c("Yes, to a superior"), recode_na = "Did not report to a superior")
+```
+
+```{r echo = F}
+tth(x = as.vector(dfh$yes..to.human.resources.if.you.have.experienced.any.form.of.sexual.harassment.in.the.workplace.within.the.last.year..was.the.issue.reported..check.all.that.apply.), lvls = c("Yes, to Human Resources"), recode_na = "Did not report to Human Resources")
+```
+
+```{r echo = F}
+tth(x = as.vector(dfh$no..but.i.told.a.coworker.if.you.have.experienced.any.form.of.sexual.harassment.in.the.workplace.within.the.last.year..was.the.issue.reported..check.all.that.apply.), lvls = c("No, but I told a coworker"), recode_na = "Did not tell a coworker")
+```
+
+```{r echo = F}
+tth(x = as.vector(dfh$no..not.reported.if.you.have.experienced.any.form.of.sexual.harassment.in.the.workplace.within.the.last.year..was.the.issue.reported..check.all.that.apply.), lvls = c("No, not reported"), recode_na = "Reported or told a coworker")
+```
+
+**If you have reported an incident of sexual harassment, how satisfied were you with the outcome?**
+```{r echo = F}
+tth(x = as.vector(dfh[dfh$reported=="Reported",]$if.you.have.reported.an.incident.of.sexual.harassment..how.satisfied.were.you.with.the.outcome.), lvls = c("Very Satisfied", "Satisfied", "Neutral", "Dissatisfied","Very Dissatisfied","Not applicable"), recode_na = "Refused")
+```
+
+**The following question was only asked of those respondents who reported experiencing sexual harassment and did not report the incicdent to a steward**
+
+**The options are listed individually as a respondent could have chosen more than one**
+
+**If you did not report to your union steward or representative, why not? Check all that apply.**
+
+```{r echo = F}
+tth(x = as.vector(dfh$didn.t.want.to.get.someone.in.trouble.if.you.did.not.report.to.your.union.steward.or.representative..why.not..check.all.that.apply.), lvls = c("Didn't want to get someone in trouble"), recode_na = "Other reason(s)")
+```
+
+```{r echo = F}
+tth(x = as.vector(dfh$unsure.how.to.report.the.incident.if.you.did.not.report.to.your.union.steward.or.representative..why.not..check.all.that.apply.), lvls = c("Unsure how to report the incident"), recode_na = "Other reason(s)")
+```
+
+```{r echo = F}
+tth(x = as.vector(dfh$unsure.reporting.the.incident.would.help.or.be.taken.seriously.if.you.did.not.report.to.your.union.steward.or.representative..why.not..check.all.that.apply.), lvls = c("Unsure reporting the incident would help or be taken seriously"), recode_na = "Other reason(s)")
+```
+
+```{r echo = F}
+tth(x = as.vector(dfh$don.t.have.a.steward.or.i.m.not.sure.who.that.person.is.if.you.did.not.report.to.your.union.steward.or.representative..why.not..check.all.that.apply.), lvls = c("Don't have a steward or I'm not sure who that person is"), recode_na = "Other reason(s)")
+```
+
+```{r echo = F}
+tth(x = as.vector(dfh$worried.about.retaliation.if.you.did.not.report.to.your.union.steward.or.representative..why.not..check.all.that.apply.), lvls = c("Worried about retaliation"), recode_na = "Other reason(s)")
+```
+
+```{r echo = F}
+tth(x = as.vector(dfh$don.t.trust.my.steward.if.you.did.not.report.to.your.union.steward.or.representative..why.not..check.all.that.apply.), lvls = c("Don't trust my steward"), recode_na = "Other reason(s)")
+```
+
+```{r echo = F}
+tth(x = as.vector(dfh$reported.to.human.resources.or.a.superior.instead.if.you.did.not.report.to.your.union.steward.or.representative..why.not..check.all.that.apply.), lvls = c("Reported to Human Resources or a superior instead"), recode_na = "Other reason(s)")
+```
+
+```{r echo = F}
+tth(x = as.vector(dfh$lack.of.support.from.co.workers.if.you.did.not.report.to.your.union.steward.or.representative..why.not..check.all.that.apply.), lvls = c("Lack of support from co-workers"), recode_na = "Other reason(s)")
+```
+
+```{r echo = F}
+tth(x = as.vector(dfh$i.was.not.a.union.member.at.the.time.of.the.incident.s..if.you.did.not.report.to.your.union.steward.or.representative..why.not..check.all.that.apply.), lvls = c("I was not a union member at the time of the incident(s)"), recode_na = "Other reason(s)")
+```
+
+```{r echo = F}
+tth(x = as.vector(dfh$other...write.in.if.you.did.not.report.to.your.union.steward.or.representative..why.not..check.all.that.apply.), lvls = c("Other - Write In"), recode_na = "Previously listed reason(s)")
+```
+```{r echo = F}
+stew<- table(df$other...write.in.if.you.did.not.report.to.your.union.steward.or.representative..why.not..check.all.that.apply..1)
+
+knitr::kable(unique(df$other...write.in.if.you.did.not.report.to.your.union.steward.or.representative..why.not..check.all.that.apply..1), col.names = c("Other reasons sexual harassment was not reported to a a steward"), align = c('l'))
+```
+
+**The following question was asked of those who responded that they did report an incident of sexual harassment to their steward**
+
+**If you did report an incident of sexual harassment to a representative of your union, how much do you agree that the union helped you achieve your desired outcome?**
+
+**Note: Zero respondents agreed or strongly agreed with this statement**
+```{r echo = F}
+tth(x = as.vector(dfh$if.you.did.report.an.incident.of.sexual.harassment.to.a.representative.of.your.union..how.much.do.you.agree.that.the.union.helped.you.achieve.your.desired.outcome.), lvls = c("Strongly agree", "Agree", "Neutral", "Disagree", "Strongly disagree", "Not applicable"), recode_na = "Refused")
+```
+
+# Industry and work location
+
+**In which industry do you primarily work?**
+
+```{r echo = F}
+tt(x = as.vector(df$in.which.industry.do.you.primarily.work.), lvls = c("Airlines","Education","Government/public service","Healthcare","Law enforcement","Manufacturing","Media","Retail","Telecom","Other - Write In")
+, recode_na = "Refused")
+```
+
+
+```{r echo = F}
+ind <- table(df$other...write.in.in.which.industry.do.you.primarily.work.)
+
+knitr::kable(ind, col.names = c("Other industries","Count"), align = c('l','r'))
+```
+
+**Please describe your work location. Check all that apply.**
+
+**The options are listed individually as a respondent could have chosen more than one.**
+
+```{r echo = F, include=F}
+tt(x = as.vector(df$work_location))
+```
+
+```{r echo = F}
+tt(x = as.vector(df$office.please.describe.your.work.location.â..check.all.that.apply.), lvls = "Office", recode_na = "Other")
+```
+
+```{r echo = F}
+tt(x = as.vector(df$call.center.please.describe.your.work.location.â..check.all.that.apply.), lvls = "Call center", recode_na = "Do not work in this location type")
+```
+
+```{r echo = F}
+tt(x = as.vector(df$newsroom.please.describe.your.work.location.â..check.all.that.apply.), lvls = "Newsroom", recode_na = "Do not work in this location type")
+```
+
+```{r echo = F}
+tt(x = as.vector(df$retail.store.please.describe.your.work.location.â..check.all.that.apply.), lvls = "Retail store", recode_na = "Do not work in this location type")
+```
+
+```{r echo = F}
+tt(x = as.vector(df$work.at.remote.sites.in.the.field.or.from.my.vehicle.please.describe.your.work.location.â..check.all.that.apply.), lvls = "Work at remote sites in the field or from my vehicle", recode_na = "Do not work in this location type")
+```
+
+```{r echo = F}
+tt(x = as.vector(df$based.from.my.home.please.describe.your.work.location.â..check.all.that.apply.), lvls = "Based from my home", recode_na = "Do not work in this location type")
+```
+
+```{r echo = F}
+tt(x = as.vector(df$airport.or.airplane.please.describe.your.work.location.â..check.all.that.apply.), lvls = "Airport or airplane", recode_na = "Do not work in this location type")
+```
+
+```{r echo = F}
+tt(x = as.vector(df$plant.or.manufacturing.site.please.describe.your.work.location.â..check.all.that.apply.), lvls = "Plant or manufacturing site", recode_na = "Do not work in this location type")
+```
+
+```{r echo = F}
+tt(x = as.vector(df$other...write.in.please.describe.your.work.location.â..check.all.that.apply.), lvls = "Other - Write In", recode_na = "Previous category(ies) applies")
+```
+```{r echo = F}
+loc <- table(df$other...write.in.please.describe.your.work.location.â..check.all.that.apply..1)
+
+knitr::kable(loc, col.names = c("Other work locations","Count"), align = c('l','r'))
+```
+
+**Do you visit homes of customers or clients on the job?**
+```{r echo = F}
+tt(x = as.vector(df$do.you.visit.homes.of.customers.or.clients.on.the.job.), lvls = c("Yes","No"), recode_na = "Refused")
+```
+
+**If yes, have you had an experience in the last year where you feared for your safety, been touched or grabbed, experienced unwanted advances, harassed verbally, or experienced another form of sexual harassment in a customer's or client's home?**
+```{r echo = F}
+tthome(x = as.vector(dfhome$if.yes..have.you.had.an.experience.in.the.last.year.where.you.feared.for.your.safety..been.touched.or.grabbed..experienced.unwanted.advances..harassed.verbally..or.experienced.another.form.of.sexual.harassment.in.a.customer.s.or.client.s.home.), lvls = c("Yes","No", "Unsure"), recode_na = "Refused")
+```
+
+**Have you received training from your employer on protecting yourself from difficult or inappropriate situations in customer's or client's homes?**
+```{r echo = F}
+tthome(x = as.vector(dfhome$have.you.received.training.from.your.employer.on.protecting.yourself.from.difficult.or.inappropriate.situations.in.customer.s.or.client.s.homes.), lvls = c("Yes","No"), recode_na = "Refused")
+```
+
+# Actions from the Union
+
+**How interested would you be in the following actions from your union to address sexual harassment in the workplace?**
+
+**More or better training on how to understand the existing sexual harassment policy and reporting procedure at your workplace**
+```{r echo = F}
+tt(x = as.vector(df$more.or.better.training.on.how.to.understand.the.existing.sexual.harassment.policy.and.reporting.procedure.at.your.workplace.how.interested.would.you.be.in.the.following.actions.from.your.union.to.address.sexual.harassment.in.the.workplace.), lvls = l3, recode_na = "Refused")
+```
+
+**Bystander training on how to intervene as a witness of sexual harassment**
+```{r echo = F}
+tt(x = as.vector(df$bystander.training.on.how.to.intervene.as.a.witness.of.sexual.harassment.how.interested.would.you.be.in.the.following.actions.from.your.union.to.address.sexual.harassment.in.the.workplace.), lvls = l3, recode_na = "Refused")
+```
+
+**Advocating for a better sexual harassment policy at your workplace**
+```{r echo = F}
+
+tt(x = as.vector(df$advocating.for.a.better.sexual.harassment.policy.at.your.workplace.how.interested.would.you.be.in.the.following.actions.from.your.union.to.address.sexual.harassment.in.the.workplace.), lvls = l3, recode_na = "Refused")
+```
+
+**Assisting and supporting victims of sexual harassment to address the issue and achieve a desired outcome**
+```{r echo = F}
+tt(x = as.vector(df$assisting.and.supporting.victims.of.sexual.harassment.to.address.the.issue.and.achieve.a.desired.outcome.how.interested.would.you.be.in.the.following.actions.from.your.union.to.address.sexual.harassment.in.the.workplace.), lvls = l3, recode_na = "Refused")
+```
+
+**Addressing issues of sexual harassment within your Local, which could include creating or improving a sexual harassment policy**
+```{r echo = F}
+tt(x = as.vector(df$addressing.issues.of.sexual.harassment.within.your.local..which.could.include.creating.or.improving.a.sexual.harassment.policy.how.interested.would.you.be.in.the.following.actions.from.your.union.to.address.sexual.harassment.in.the.workplace.), lvls = l3, recode_na = "Refused")
+```
+
+# Demographics
+
+**Gender**
+```{r echo = F}
+tt(x = as.vector(df$sexcat), lvls = c("Female", "Male", "Unknown"), recode_na = "Refused")
+```
+
+**Race**
+```{r echo = F}
+tt(x = as.vector(df$racecat), lvls = c("American Indian/Alaska Native","Asian", "Black/African-American", "Hispanic/Latino", "Native Hawaiian or Other Pacific Islander", "White", "Other"), recode_na = "Refused")
+```
+
+**Age**
+```{r echo = F}
+tt(x = as.vector(df$agerpt), lvls = c("Less than 35", "35 - 44", "45 - 54", "55 - 64", '65+'), recode_na = "Refused")
+```
+
+**Income**
+```{r echo = F}
+tt(x = as.vector(df$what.is.your.annual.household.income.),lvls = c("$150,000 or more"
+,"$125,000 to $149,999"
+,"$100,000 to $124,999"
+,"$75,000 to $99,999"
+,"$50,000 to $74,999"  
+,"$35,000 to $49,999"
+,"$25,000 to $34,999"
+,"Less than $25,000"), recode_na = "Refused")
+```
+
+**Education**
+```{r echo = F}
+tt(x = as.vector(df$what.is.your.highest.level.of.education.),lvls = c("Advanced degree (Master's, Ph.D., M.D.)" 
+,"Bachelor's degree"
+,"Associate degree"
+,"Some college, no degree"
+,"Trade/technical school" 
+,"Graduated high school"
+,"Less than high school"), recode_na = "Refused")
+```
+
+# Comments
+**Additonal Comments**
+```{r echo = F}
+
+knitr::kable(unique(df[df$are.there.any.additional.comments.you.d.like.to.share.!="No" & df$are.there.any.additional.comments.you.d.like.to.share. !="None" &df$are.there.any.additional.comments.you.d.like.to.share.!="no" & df$are.there.any.additional.comments.you.d.like.to.share. != "Not at this time" & df$are.there.any.additional.comments.you.d.like.to.share. !="NONE" & df$are.there.any.additional.comments.you.d.like.to.share. != "none" & df$are.there.any.additional.comments.you.d.like.to.share. != "na" & df$are.there.any.additional.comments.you.d.like.to.share. != "Na" & df$are.there.any.additional.comments.you.d.like.to.share. != "N/A" & df$are.there.any.additional.comments.you.d.like.to.share. != "Nope" & df$are.there.any.additional.comments.you.d.like.to.share. != "N/a" & df$are.there.any.additional.comments.you.d.like.to.share. != "No", ]$are.there.any.additional.comments.you.d.like.to.share.), col.names = "Comments")
+```

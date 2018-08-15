@@ -1,0 +1,378 @@
+"what.is.your.highest.level.of.education."
+""	0.0372670486040482
+"Advanced degree (Master's, Ph.D., M.D.)"	0.0970507783440622
+"Associate degree"	0.135959823567319
+"Bachelor's degree"	0.251952648282837
+"Graduated high school"	0.121958427679379
+"Less than high school"	0.00498785239794796
+"Some college, no degree"	0.295873189772364
+"Trade/technical school"	0.0549502313520432
+"are.you.currently.a.dues.paying.member.of.the.communications.workers.of.america..cwa.."
+"Yes"	1
+"would.you.agree.or.disagree.that.sexual.harassment.is.an.issue.in.your.workplace."
+""	0.00161831937532872
+"Agree"	0.205625952106044
+"Disagree"	0.248186920686056
+"Neutral"	0.194335212384732
+"Strongly agree"	0.139778530582131
+"Strongly disagree"	0.210455064865709
+"â..have.you.personally.experienced.any.of.the.following.harassments.at.your.current.job.or.workplace.within.the.last.year...verbal.harassment.of.a.sexual.nature..unwanted.touching.or.physical.contact..cyber.harassment..including.unwanted.comments.or.photos.shared.via.email..social.media..or.text...unwelcome.sexual.advances.or.requests.for.sexual.favors..physical.acts.of.sexual.assault..homophobic.or.transphobic.comments.or.behavior..sexism.or.gender.based.discrimination..other.forms.of.sexual.harassment."
+""	0.0182060929724481
+"No"	0.628914398853519
+"Unsure"	0.0313079819481843
+"Yes"	0.321571526225848
+"yes..to.a.steward.if.you.have.experienced.any.form.of.sexual.harassment.in.the.workplace.within.the.last.year..was.the.issue.reported..check.all.that.apply."
+""	0.965570182822864
+"Yes, to a steward"	0.034429817177136
+"yes..to.a.superior.if.you.have.experienced.any.form.of.sexual.harassment.in.the.workplace.within.the.last.year..was.the.issue.reported..check.all.that.apply."
+""	0.945182429955194
+"Yes, to a superior"	0.0548175700448061
+"yes..to.human.resources.if.you.have.experienced.any.form.of.sexual.harassment.in.the.workplace.within.the.last.year..was.the.issue.reported..check.all.that.apply."
+""	0.977025644002819
+"Yes, to Human Resources"	0.0229743559971811
+"no..but.i.told.a.coworker.if.you.have.experienced.any.form.of.sexual.harassment.in.the.workplace.within.the.last.year..was.the.issue.reported..check.all.that.apply."
+""	0.893454523842243
+"No, but I told a coworker"	0.106545476157757
+"no..not.reported.if.you.have.experienced.any.form.of.sexual.harassment.in.the.workplace.within.the.last.year..was.the.issue.reported..check.all.that.apply."
+""	0.862067591923861
+"No, not reported"	0.137932408076139
+"if.you.have.reported.an.incident.of.sexual.harassment..how.satisfied.were.you.with.the.outcome."
+""	0.0394183496308319
+"Dissatisfied"	0.0265881793305575
+"Neutral"	0.0758103109622724
+"Not applicable"	0.790180383165278
+"Satisfied"	0.00591095904937981
+"Very Dissatisfied"	0.0505109815829143
+"Very Satisfied"	0.0115808362787666
+"didnâ..t.want.to.get.someone.in.trouble.if.you.did.not.report.to.your.union.steward.or.representative..why.not..check.all.that.apply."
+""	0.939363088492577
+"Didnâ€™t want to get someone in trouble"	0.060636911507423
+"unsure.how.to.report.the.incident.if.you.did.not.report.to.your.union.steward.or.representative..why.not..check.all.that.apply."
+""	0.964109146324288
+"Unsure how to report the incident"	0.0358908536757124
+"unsure.reporting.the.incident.would.help.or.be.taken.seriously.if.you.did.not.report.to.your.union.steward.or.representative..why.not..check.all.that.apply."
+""	0.908635127844215
+"Unsure reporting the incident would help or be taken seriously"	0.0913648721557849
+"donâ..t.have.a.steward.or.iâ..m.not.sure.who.that.person.is.if.you.did.not.report.to.your.union.steward.or.representative..why.not..check.all.that.apply."
+""	0.991363980747596
+"Donâ€™t have a steward or Iâ€™m not sure who that person is"	0.008636019252404
+"worried.about.retaliation.if.you.did.not.report.to.your.union.steward.or.representative..why.not..check.all.that.apply."
+""	0.902231230783008
+"Worried about retaliation"	0.0977687692169921
+"donâ..t.trust.my.steward.if.you.did.not.report.to.your.union.steward.or.representative..why.not..check.all.that.apply."
+""	0.962582474965107
+"Donâ€™t trust my steward"	0.0374175250348932
+"reported.to.human.resources.or.a.superior.instead.if.you.did.not.report.to.your.union.steward.or.representative..why.not..check.all.that.apply."
+""	0.97730809348903
+"Reported to Human Resources or a superior instead"	0.0226919065109695
+"lack.of.support.from.co.workers.if.you.did.not.report.to.your.union.steward.or.representative..why.not..check.all.that.apply."
+""	0.954131657146325
+"Lack of support from co-workers"	0.0458683428536747
+"i.was.not.a.union.member.at.the.time.of.the.incident.s..if.you.did.not.report.to.your.union.steward.or.representative..why.not..check.all.that.apply."
+""	0.998828895548206
+"I was not a union member at the time of the incident(s)"	0.00117110445179417
+"other...write.in.if.you.did.not.report.to.your.union.steward.or.representative..why.not..check.all.that.apply."
+""	0.946931526117047
+"Other - Write In"	0.053068473882953
+"other...write.in.if.you.did.not.report.to.your.union.steward.or.representative..why.not..check.all.that.apply..1"
+""	0.947756930874855
+"All harassment comes from customers.  I feel like I have the support to refuse service."	0.00143697687196845
+"All of the above."	0.00198271508318835
+"Anxious about reporting, wanted to process"	0.00277827864035956
+"Did not want to jeopardize my job."	0.00040457984383218
+"Felt uncomfortable but not sure if they meant to make me uncomfortable "	0.00277827864035956
+"from the other airline, did not want people to think I was picking on that airline"	0.00198271508318835
+"He was a very senior captain and I was with a very senior crew. Even when I told them what happened, they didn't have my back because they were all close friends so I was afraid of what would happen to me if I reported it. I was also on my 6 month probation where all it took was to have senior flight attendants go against u so I was afraid. "	0.00143697687196845
+"homophobic comments by co-workers, not directed to anyone in particular, in workplace are common. Sometimes I respond/confront perpetrator, sometimes I don't"	0.00264812674887113
+"I've heard that HR has done nothing and infact made the person whom reported incident seem like it was their fault. "	0.000729515077907363
+"I AM A DISABLED VET AND HAVE BEEN HARASSED. ON GOING. HR. FILED NOTHING DONE OTHER THAN BEING HARASSED FURTHER. THE COMPANY WILL NOT ACCEPT MY DISABILITY STATUS EVEN FROM THE VETERANS ADMINISTRATION. "	0.00040457984383218
+"I handled the situation on the plane."	0.00143697687196845
+"I have no recourse through my union for harassment from people outside my union. And I didn't want to spoil my office's relationship with outside attorneys. "	0.00143697687196845
+"I thought management should respond appropriately. "	0.00198271508318835
+"I was on probation at the time and even though I had a witness I felt treated by my probation period "	0.000766524607961993
+"Informed union of situation but was told they couldn't ask for a reprimand just represent me if I needed it. "	0.00040457984383218
+"It's not a comfortable situation to discuss with anyone, didn't want to get the other person in trouble, and was afraid of retaliation. The other person was married and supposedly only sent in appropriate texts when he was drunk. I eventually blocked his number but have been on the same team as him since then. Luckily, nothing ever happens while actually at work."	0.00143697687196845
+"it was from a customer"	0.00136892601872394
+"It was gender discrimination, but I can't necessarily prove that. Still, peacock productions at NBC is notorious for being biased against women."	0.00136892601872394
+"It was reported"	0.00143697687196845
+"it was reported in a survey that upper management reads on store management. the manager was moved to another store shortly there after."	0.00168919355047893
+"Just didn't "	0.00102149103664148
+"More of some things that have been observed over my 23 years here."	0.00198271508318835
+"na"	0.00160946529699009
+"Na "	0.00040457984383218
+"Not applicable"	0.00040457984383218
+"Office morale encourages behavior"	0.000867069420195387
+"Reported an incident of crew conflict in past to a supervisor and was not acknowledged"	0.00264812674887113
+"Shaun McNulty is my Superior and I'm not sure who to go to above him"	0.00040457984383218
+"Spoke with my aggressor "	0.00040457984383218
+"STEWARD NOT ON SITE"	0.00198271508318835
+"The harassment was not by a coworker it was a member "	0.00136892601872394
+"The person who did it got away with it before. AT&T did nothing. The lady who reported it before got fired. "	0.000867069420195387
+"There is no real way to prove gender discrimination in my case"	0.00136892601872394
+"Union wasn't in place at the time "	0.000867069420195387
+"Unsure who to trust as some stewards have big mouths"	0.00040457984383218
+"Was able to handle myself..."	0.000825404757808216
+"Was not a big deal to even report"	0.00040457984383218
+"Was relatively minor in nature."	0.00136892601872394
+"When a straight person harasses a gay person it is taken seriously. When a gay person harasses a straight person it is not. Therefore I did not bother reporting. "	0.00168919355047893
+"Worried I wouldn't be taken seriously or told I should have done more to stop it"	0.00143697687196845
+"if.you.did.report.an.incident.of.sexual.harassment.to.a.representative.of.your.union..how.much.do.you.agree.that.the.union.helped.you.achieve.your.desired.outcome."
+""	0.965570182822864
+"Disagree"	0.00966296111697612
+"Neutral"	0.0100486019209563
+"Not applicable"	0.00234066979301644
+"Strongly disagree"	0.0123775843461872
+"a.direct.supervisor.please.answer.whether.within.the.last.year.people.in.any.of.the.following.roles.have.ever.been.perpetrators.of.sexual.harassment.against.you.at.your.current.job..check.all.that.apply."
+""	0.935275094874423
+"A direct supervisor"	0.0647249051255769
+"someone.in.a.more.senior.role.who.is.not.a.direct.supervisor.please.answer.whether.within.the.last.year.people.in.any.of.the.following.roles.have.ever.been.perpetrators.of.sexual.harassment.against.you.at.your.current.job..check.all.that.apply."
+""	0.918114322080058
+"Someone in a more senior role who is not a direct supervisor"	0.0818856779199417
+"another.union.represented.employee.please.answer.whether.within.the.last.year.people.in.any.of.the.following.roles.have.ever.been.perpetrators.of.sexual.harassment.against.you.at.your.current.job..check.all.that.apply."
+""	0.852005692799458
+"Another union-represented employee"	0.147994307200542
+"a.steward..representative..or.leader.of.my.union.please.answer.whether.within.the.last.year.people.in.any.of.the.following.roles.have.ever.been.perpetrators.of.sexual.harassment.against.you.at.your.current.job..check.all.that.apply."
+""	0.96773403739104
+"A steward, representative, or leader of my union"	0.0322659626089603
+"a.contractor.hired.by.my.employer.please.answer.whether.within.the.last.year.people.in.any.of.the.following.roles.have.ever.been.perpetrators.of.sexual.harassment.against.you.at.your.current.job..check.all.that.apply."
+""	0.984154301791027
+"A contractor hired by my employer"	0.0158456982089734
+"a.more.junior.employee.please.answer.whether.within.the.last.year.people.in.any.of.the.following.roles.have.ever.been.perpetrators.of.sexual.harassment.against.you.at.your.current.job..check.all.that.apply."
+""	0.972768482918161
+"A more junior employee"	0.0272315170818394
+"a.customer.of.my.employer.please.answer.whether.within.the.last.year.people.in.any.of.the.following.roles.have.ever.been.perpetrators.of.sexual.harassment.against.you.at.your.current.job..check.all.that.apply."
+""	0.918058148768102
+"A customer of my employer"	0.081941851231898
+"other...write.in.please.answer.whether.within.the.last.year.people.in.any.of.the.following.roles.have.ever.been.perpetrators.of.sexual.harassment.against.you.at.your.current.job..check.all.that.apply."
+""	0.976847620116591
+"Other - Write In"	0.0231523798834095
+"exclusive...none.of.the.above.please.answer.whether.within.the.last.year.people.in.any.of.the.following.roles.have.ever.been.perpetrators.of.sexual.harassment.against.you.at.your.current.job..check.all.that.apply."
+""	0.351453011342847
+"Exclusive / None of the above"	0.648546988657154
+"other...write.in.please.answer.whether.within.the.last.year.people.in.any.of.the.following.roles.have.ever.been.perpetrators.of.sexual.harassment.against.you.at.your.current.job..check.all.that.apply..1"
+""	0.978535911941427
+"A writer"	0.000972676795438711
+"Attorneys outside of the Public Defender's office, clients"	0.00143697687196845
+"Captain or first officer"	0.00143697687196845
+"Coworker"	0.00143697687196845
+"Customers"	0.00168919355047893
+"Harassment is tolerated by HR and CWA"	0.00040457984383218
+"Just another Fa"	0.00143697687196845
+"MANAGER BULLYING OUR YARD FOR YEARS. NOTHING DONE. FEAR, TRAUMA, ANGER AND REPORTED POTENTIAL FOR VIOLENCE TO HAPPEN."	0.00040457984383218
+"n/a"	0.000867069420195387
+"N/A"	0.00040457984383218
+"none"	0.00198271508318835
+"NOT THAT I KNOW OF."	0.00040457984383218
+"Not within the year but I've had harassment by fellow union members never report for fear of black ball which does occur. "	0.00040457984383218
+"Other supervisor"	0.00040457984383218
+"passenger"	0.00136892601872394
+"Pilot"	0.00220350147993044
+"Pilot "	0.00143697687196845
+"Pilot/FO"	0.000867069420195387
+"Security "	0.00149599302375443
+"Special needs volunteer"	0.00040457984383218
+"have.you.witnessed.any.of.the.following.harassments.a.bystander.at.your.current.job.or.workplace.within.the.last.year...verbal.harassment.of.a.sexual.nature..unwanted.touching.or.physical.contact..cyber.harassment..including.unwanted.comments.or.photos.shared.via.email..social.media..or.text...unwelcome.sexual.advances.or.requests.for.sexual.favors..physical.acts.of.sexual.assault..homophobic.or.transphobic.comments.or.behavior..sexism.or.gender.based.discrimination..other.forms.of.sexual.harassment."
+""	0.0214301940618496
+"No"	0.61380634059477
+"Unsure"	0.0487358801649814
+"Yes"	0.316027585178398
+"how.often.do.you.experience.or.witness.sexual.harassment.at.your.workplace."
+""	0.0215979182103329
+"1 or more times per month"	0.0960368239434036
+"1 or more times per week"	0.069676717302223
+"1 or more times per year"	0.116911498871092
+"At least once per day"	0.0380825706329298
+"Less often than one time per year"	0.10620153351817
+"Never"	0.470096443909448
+"Unsure"	0.0813964936124008
+"how.satisfied.are.you.with.the.sexual.harassment.policy.and.procedures.at.your.workplace."
+""	0.0198244123477768
+"Dissatisfied"	0.0773151989039207
+"Neutral"	0.211686164435164
+"Satisfied"	0.230064905724692
+"Unsure or unaware of any policies or procedures related to sexual harassment in my workplace"	0.136726912884792
+"Very Dissatisfied"	0.0628579361059055
+"Very Satisfied"	0.261524469597749
+"office.please.describe.your.work.location.â..check.all.that.apply."
+""	0.751291728665716
+"Office"	0.248708271334284
+"call.center.please.describe.your.work.location.â..check.all.that.apply."
+""	0.834508757224122
+"Call center"	0.165491242775878
+"newsroom.please.describe.your.work.location.â..check.all.that.apply."
+""	0.977896346632466
+"Newsroom"	0.0221036533675338
+"retail.store.please.describe.your.work.location.â..check.all.that.apply."
+""	0.953867625385204
+"Retail store"	0.0461323746147957
+"work.at.remote.sites.in.the.field.or.from.my.vehicle.please.describe.your.work.location.â..check.all.that.apply."
+""	0.7487749279142
+"Work at remote sites in the field or from my vehicle"	0.2512250720858
+"based.from.my.home.please.describe.your.work.location.â..check.all.that.apply."
+""	0.981348955847771
+"Based from my home"	0.0186510441522289
+"airport.or.airplane.please.describe.your.work.location.â..check.all.that.apply."
+""	0.821982788407239
+"Airport or airplane"	0.178017211592761
+"plant.or.manufacturing.site.please.describe.your.work.location.â..check.all.that.apply."
+""	0.963884372191218
+"Plant or manufacturing site"	0.0361156278087823
+"other...write.in.please.describe.your.work.location.â..check.all.that.apply."
+""	0.886004553191653
+"Other - Write In"	0.113995446808347
+"other...write.in.please.describe.your.work.location.â..check.all.that.apply..1"
+""	0.887441530063621
+"A labor Union "	0.00149599302375443
+"Broadband technician"	0.00136892601872394
+"Cable Technician Telecommunication "	0.000903692921047989
+"central office"	0.00393804472388635
+"Central Office"	0.00136892601872394
+"Central Office "	0.00335164110191229
+"classroom"	0.000825404757808216
+"Classroom"	0.00102149103664148
+"COMPUTER ROOM"	0.00264812674887113
+"Court, jail"	0.00143697687196845
+"Css"	0.000825404757808216
+"DATA CENTER"	0.00040457984383218
+"Department"	0.00232857942689626
+"Distribution center"	0.00168829182483642
+"Dpw"	0.000903692921047989
+"DV shelter"	0.000825404757808216
+"Emergency room."	0.00198271508318835
+"Field "	0.00080915968766436
+"field technician"	0.00040457984383218
+"Field technician garaged at remote location "	0.00142520977696103
+"Field work throughout burlington county"	0.00040457984383218
+"Film & TV Studios"	0.00232857942689626
+"Garage"	0.00853494675469421
+"Garage "	0.00165080951561643
+"garage for techs"	0.00232857942689626
+"Garage. "	0.00160946529699009
+"hospital"	0.00717368123917143
+"Hospital"	0.00361592308214371
+"Hospital "	0.00463084183205948
+"Investigations are a joke"	0.00040457984383218
+"Library"	0.00264812674887113
+"Nursing home"	0.000867069420195387
+"Office and worksites"	0.00136892601872394
+"outdoors"	0.00160946529699009
+"outside field technician"	0.000972676795438711
+"Outside workforce garage"	0.00232857942689626
+"Pharmacy"	0.000867069420195387
+"Police department"	0.00168919355047893
+"prem tech"	0.00102149103664148
+"Prison"	0.00209377339431111
+"Psychiatric Hospital"	0.00232857942689626
+"retired"	0.00232857942689626
+"School"	0.00143697687196845
+"School "	0.00136892601872394
+"storeroom"	0.00040457984383218
+"Studio"	0.00634635240427146
+"Substance abuse hospital"	0.00198271508318835
+"Tech garage"	0.000972676795438711
+"Training Department "	0.00277827864035956
+"Undersea cable station, underground building"	0.00198271508318835
+"Union"	0.00143697687196845
+"University"	0.00137725663927089
+"Verizon Garage"	0.00143697687196845
+"warehouse"	0.00168919355047893
+"Warehouse"	0.0012012018702406
+"work in the field; most of my interaction with co-workers and supervisors is at the garage at morning dispatch"	0.00264812674887113
+"Yard"	0.00232857942689626
+"YARD ./ OFFICE. RAN BY MEANS OF INTIMIDATION OF MULTIPLE WORKERS.  LOCAL HAS BEEN NOTIFIED MANY...MANY TIMES.  NOW LEGACY TECHS ARE FORCED TO DO 2 JOBS AS NEW TECHS GET THE FIBER OPTIC WORK.  WE ARE BEING PUSHED OUT OR FORCED TO QUIT BY WAY OF HATING THE WORK AND AMOUNTS REQUIRED.  THIS WILL SAVE THE COMPANY BILLIONS.  INSIDE MANAGER TASK FORCES SENT OUT TO TAKE OUT... THIS IS REAL"	0.00040457984383218
+"do.you.visit.homes.of.customers.or.clients.on.the.job."
+""	0.0212016689870477
+"No"	0.740784054833669
+"Yes"	0.238014276179283
+"if.yes..have.you.had.an.experience.in.the.last.year.where.you.feared.for.your.safety..been.touched.or.grabbed..experienced.unwanted.advances..harassed.verbally..or.experienced.another.form.of.sexual.harassment.in.a.customerâ..s.or.clientâ..s.home."
+""	0.764163809527105
+"No"	0.174666192543
+"Unsure"	0.00928538883208671
+"Yes"	0.0518846090978082
+"have.you.received.training.from.your.employer.on.protecting.yourself.from.difficult.or.inappropriate.situations.in.customerâ..s.or.clientâ..s.homes."
+""	0.763759229683273
+"No"	0.136753463265951
+"Yes"	0.0994873070507759
+"more.or.better.training.on.how.to.understand.the.existing.sexual.harassment.policy.and.reporting.procedure.at.your.workplace.how.interested.would.you.be.in.the.following.actions.from.your.union.to.address.sexual.harassment.in.the.workplace."
+""	0.0220024980541651
+"Interested"	0.25115615149276
+"Neutral"	0.24339404580457
+"Not at all interested or opposed"	0.0889946055528533
+"Not interested"	0.164865418352692
+"Very interested"	0.22958728074296
+"bystander.training.on.how.to.intervene.as.a.witness.of.sexual.harassment.how.interested.would.you.be.in.the.following.actions.from.your.union.to.address.sexual.harassment.in.the.workplace."
+""	0.0255946784343436
+"Interested"	0.301238486842571
+"Neutral"	0.217103503776292
+"Not at all interested or opposed"	0.0552154119091162
+"Not interested"	0.14179673565784
+"Very interested"	0.259051183379837
+"advocating.for.a.better.sexual.harassment.policy.at.your.workplace.how.interested.would.you.be.in.the.following.actions.from.your.union.to.address.sexual.harassment.in.the.workplace."
+""	0.0250489402231237
+"Interested"	0.199771381864611
+"Neutral"	0.308917833156321
+"Not at all interested or opposed"	0.0817246405857528
+"Not interested"	0.149528172140389
+"Very interested"	0.235009032029802
+"assisting.and.supporting.victims.of.sexual.harassment.to.address.the.issue.and.achieve.a.desired.outcome.how.interested.would.you.be.in.the.following.actions.from.your.union.to.address.sexual.harassment.in.the.workplace."
+""	0.0222430373324313
+"Interested"	0.290520678572986
+"Neutral"	0.229662495330004
+"Not at all interested or opposed"	0.0633278927768356
+"Not interested"	0.145065214286693
+"Very interested"	0.24918068170105
+"addressing.issues.of.sexual.harassment.within.your.local..which.could.include.creating.or.improving.a.sexual.harassment.policy.how.interested.would.you.be.in.the.following.actions.from.your.union.to.address.sexual.harassment.in.the.workplace."
+""	0.0222430373324313
+"Interested"	0.223343993439423
+"Neutral"	0.303746411020189
+"Not at all interested or opposed"	0.0683469970215153
+"Not interested"	0.153908999485184
+"Very interested"	0.228410561701258
+"what.is.your.gender."
+""	0.160361729993859
+"Female"	0.396493092221188
+"Gender Variant / Non-conforming"	0.00607517578561146
+"Male"	0.433505212434645
+"Other - Write In"	0.00080915968766436
+"Transgender Female"	0.00173413884039077
+"Transgender Male"	0.00102149103664148
+"what.is.your.race."
+""	0.0210381518792734
+"American Indian/Alaska Native"	0.00283205890682526
+"Asian"	0.00687785734514706
+"Black/African-American"	0.157427967160484
+"Hispanic/Latino"	0.0895040379032296
+"Native Hawaiian or Other Pacific Islander"	0.00161831937532872
+"Other - Write In"	0.0137557146902941
+"White"	0.706945892739418
+"in.which.industry.do.you.primarily.work."
+""	0.0230348950823014
+"Airlines"	0.201197931992515
+"Education"	0.0118508595264473
+"Government/public service"	0.101631901812553
+"Healthcare"	0.0517661182542382
+"Law enforcement"	0.00608355706853816
+"Manufacturing"	0.0177349886492014
+"Media"	0.0564761112002924
+"Other - Write In"	0.0352693882100339
+"Retail"	0.0394243846902987
+"Telecom"	0.455529863513581
+"what.is.your.annual.household.income."
+""	0.0504865381275467
+"$100,000 to $124,999"	0.126577177878109
+"$125,000 to $149,999"	0.0518135001032749
+"$150,000 or more"	0.0852073216924305
+"$25,000 to $34,999"	0.0703624897542705
+"$35,000 to $49,999"	0.127472811788427
+"$50,000 to $74,999"	0.253604749744085
+"$75,000 to $99,999"	0.20454050139958
+"Less than $25,000"	0.0299349095122762
+"what.is.your.highest.level.of.education."
+""	0.0372670486040482
+"Advanced degree (Master's, Ph.D., M.D.)"	0.0970507783440622
+"Associate degree"	0.135959823567319
+"Bachelor's degree"	0.251952648282837
+"Graduated high school"	0.121958427679379
+"Less than high school"	0.00498785239794796
+"Some college, no degree"	0.295873189772364
+"Trade/technical school"	0.0549502313520432
