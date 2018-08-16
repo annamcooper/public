@@ -1,0 +1,37 @@
+select
+COL0_LOCAL_DISTRICT
+,COL1_LOCAL
+,COL2_LOCAL_NAME
+,COL5_MEMBER_NUMBER
+,COL11_MEMBER_STATUS
+,COL7_CLOCK
+,FIRST_NAME  
+,MIDDLE_NAME 
+,LAST_NAME 
+,NAME_SUFFIX 
+, case when mail_address_line_1 is null then COL14_ADDRESS2 else mail_address_line_1 end as addr_line_1
+, case when mail_address_line_1 is null then COL13_ADDRESS1 else MAIL_ADDRESS_LINE_2 end as addr_line_2
+, case when mail_address_line_1 is null then COL16_CITY else MAIL_ADDRESS_CITY end as city
+, case when mail_address_line_1 is null then COL17_PROVINCE_STATE else MAIL_ADDRESS_STATE end as state
+, case when mail_address_line_1 is null then  COL18_ZIP else MAIL_ADDRESS_ZIP end as zip
+from piedmont_pending_member_matched
+where receive_ballot = 'Y'
+union all
+select 
+COL0_LOCAL_DISTRICT
+,COL1_LOCAL
+,COL2_LOCAL_NAME
+,COL5_MEMBER_NUMBER
+,COL11_MEMBER_STATUS
+,COL7_CLOCK
+,FIRST_NAME  
+,MIDDLE_NAME 
+,LAST_NAME 
+,NAME_SUFFIX 
+, case when mail_address_line_1 is null then COL14_ADDRESS2 else mail_address_line_1 end as addr_line_1
+, case when mail_address_line_1 is null then COL13_ADDRESS1 else MAIL_ADDRESS_LINE_2 end as addr_line_2
+, case when mail_address_line_1 is null then COL16_CITY else MAIL_ADDRESS_CITY end as city
+, case when mail_address_line_1 is null then COL17_PROVINCE_STATE else MAIL_ADDRESS_STATE end as state
+, case when mail_address_line_1 is null then  COL18_ZIP else MAIL_ADDRESS_ZIP end as zip
+from piedmont_on_leave_matched
+where receive_ballot = 'Y'
